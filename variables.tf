@@ -1,0 +1,290 @@
+##############################################################################
+# Account Variables
+##############################################################################
+
+variable "ibmcloud_api_key" {
+  description = "The IBM Cloud platform API key needed to deploy IAM enabled resources."
+  type        = string
+  sensitive   = true
+}
+
+variable "power_workspace_location" {
+  description = <<-EOD
+    The location used to create the power workspace.
+
+    Available locations are: dal10, dal12, us-south, us-east, wdc06, wdc07, sao01, sao04, tor01, mon01, eu-de-1, eu-de-2, lon04, lon06, syd04, syd05, tok04, osa21, mad02, mad04.
+    Please see [PowerVS Locations](https://cloud.ibm.com/docs/power-iaas?topic=power-iaas-creating-power-virtual-server) for a complete list of PowerVS locations.
+  EOD
+  type        = string
+}
+
+variable "resource_group_name" {
+  description = <<-EOD
+    Resource Group to create new resources in (Resource Group name is case sensitive).
+
+    This will also be used to locate your existing Secrets Manager and Cloud Object Storage instance.
+    If the Secrets Manager or Cloud Object Storage instance is in a different resource group, use the optional
+    variables `secret_manager_resource_group_name` and `cos_instance_resource_group_name`, respectively, to specify those.
+  EOD
+  type        = string
+}
+
+variable "secret_manager_name" {
+  description = <<-EOD
+    The Secrets Manager to create the VPN certificate in.
+
+    The Secrets Manager maybe in any Resource Group or Region.
+    By default, the Resource Group specified by the variable `resource_group_name` will be used to locate the Secrets Manager.
+    However, if the Secrets Manager is in another Resource Group use the optional variable `secret_manager_resource_group_name` to specify it.
+  EOD
+  type        = string
+}
+
+variable "cos_instance_name" {
+  description = <<-EOD
+    The Cloud Object Storage instance name used to create a bucket with OVPN configuration file in.
+    The configuration file is used with OpenVPN Connect to connect your remote machine with the VPN created in IBM Cloud.
+
+    The COS instance maybe in any Resource Group.
+    By default, the Resource Group specified by the variable `resource_group_name` will be used to locate the COS instance.
+    However, if the COS instance is in another Resource Group use the optional variable `cos_instance_resource_group_name` to specify it.
+  EOD
+  type        = string
+}
+
+variable "name" {
+  description = <<-EOD
+    The name used for the new Power Workspace, Transit Gateway, and VPC.
+    Other resources created will use this for their basename and be suffixed by a random identifier.
+  EOD
+  type        = string
+}
+
+variable "secret_manager_resource_group_name" {
+  description = <<-EOD
+    Optional variable to specify the Resource Group the Secret Manager is in.
+    If not supplied, the value specified for `resource_group_name` will be used to locate your Secrets Manager.
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "cos_instance_resource_group_name" {
+  description = <<-EOD
+    Optional variable to specify the Resource Group the Cloud Object Storage instance is in.
+    If not supplied, the value specified for `resource_group_name` will be used to locate your COS instance.
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "transit_gateway_name" {
+  description = <<-EOD
+    Optional variable to specify the name of an existing transit gateway, if supplied it will be assumed that you've connected
+    your power workspace to it. A connection to the VPC containing the VPN Server will be added, but not for the Power Workspace.
+    Supplying this variable will also suppress Power Workspace creation.
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "power_cloud_connection_speed" {
+  description = <<-EOD
+    Optional variable to specify the speed of the cloud connection (speed in megabits per second).
+    This only applies to locations WITHOUT Power Edge Routers.
+
+    Supported values are 50, 100, 200, 500, 1000, 2000, 5000, 10000. Default Value is 1000.
+  EOD
+  type        = number
+  default     = 1000
+}
+
+variable "power_workspace_name" {
+  description = <<-EOD
+    Optional variable to specify the name of an existing power workspace.
+    If supplied the workspace will be used to connect the VPN with.
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "vpn_subnet_cidr" {
+  description = <<-EOD
+    Optional variable to specify the CIDR for subnet the VPN will be in. You should only need to change this
+    if you have a conflict with your Power Workstation Subnets or with a VPC connected with this solution.
+  EOD
+  type        = string
+  default     = "10.134.0.0/28"
+}
+
+variable "vpn_client_cidr" {
+  description = <<-EOD
+    Optional variable to specify the CIDR for VPN client IP pool space. This is the IP space that will be
+    used by machines connecting with the VPN. You should only need to change this if you have a conflict
+    with your local network.
+  EOD
+  type        = string
+  default     = "192.168.8.0/22"
+}
+
+variable "data_location_file_path" {
+  description = <<-EOD
+    Optional variable to specify Where the file with PER location data is stored. This variable is used
+    for testing, and should not normally need to be altered.
+  EOD
+  type        = string
+  default     = "./data/locations.yaml"
+}
+
+variable "create_default_vpc_address_prefixes" {
+  description = <<-EOD
+    Optional variable to indicate whether a default address prefix should be created for each zone in this VPC.
+  EOD
+  type        = bool
+  default     = false
+}
+
+variable "per_override" {
+  description = <<-EOD
+    Optional variable to force the PowerVS location to be seen as PER enabled by this automation.
+    When set `true`, this will force the use of PER instead of creating Cloud Connections.
+    Set `true` when a location has been upgraded to PER before this automation has been made aware.
+    See [Getting started with the Power Edge Router](https://cloud.ibm.com/docs/power-iaas?topic=power-iaas-per) for a complete list of PER enabled locations.
+  EOD
+  type        = bool
+  default     = false
+}
+
+##############################################################################
+# IBMi Instance Variables
+##############################################################################
+
+variable "ibmi_instance_name" {
+  description = <<-EOD
+    Name for the IBMi Power Virtual Server instance.
+    Leave empty to skip IBMi instance creation.
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "ibmi_ssh_key_name" {
+  description = <<-EOD
+    Name of an existing SSH key in the Power Virtual Server workspace to inject
+    into the IBMi instance. Required when ibmi_instance_name is set.
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "ibmi_network_name" {
+  description = <<-EOD
+    Name of an existing Power Virtual Server network to attach the IBMi instance to.
+    Required when ibmi_instance_name is set.
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "ibmi_image_name" {
+  description = <<-EOD
+    Stock catalog image name for the IBMi OS to deploy.
+    Common values:
+      IBMi-7.5-09-2024-1  (IBM i 7.5)
+      IBMi-7.4-09-2024-1  (IBM i 7.4)
+      IBMi-7.3-09-2024-1  (IBM i 7.3)
+    Run `ibmcloud pi images` in the target workspace to list all available images.
+  EOD
+  type    = string
+  default = "IBMi-7.5-09-2024-1"
+}
+
+variable "ibmi_sys_type" {
+  description = <<-EOD
+    Machine type (processor architecture) for the IBMi instance.
+    Supported values: s922, s1022, e980, e1080.
+  EOD
+  type    = string
+  default = "s922"
+
+  validation {
+    condition     = contains(["s922", "s1022", "e980", "e1080"], var.ibmi_sys_type)
+    error_message = "ibmi_sys_type must be one of: s922, s1022, e980, e1080."
+  }
+}
+
+variable "ibmi_proc_type" {
+  description = <<-EOD
+    Processor entitlement type for the IBMi instance.
+    - shared    : capped shared processor
+    - uncapped  : uncapped shared processor
+    - dedicated : dedicated processor core
+  EOD
+  type    = string
+  default = "shared"
+
+  validation {
+    condition     = contains(["shared", "uncapped", "dedicated"], var.ibmi_proc_type)
+    error_message = "ibmi_proc_type must be one of: shared, uncapped, dedicated."
+  }
+}
+
+variable "ibmi_processors" {
+  description = <<-EOD
+    Number of processor cores to allocate to the IBMi instance.
+    For shared/uncapped this is the entitled capacity (e.g. 0.25, 0.5, 1, 2).
+    For dedicated this must be a whole number (e.g. 1, 2, 4).
+  EOD
+  type    = number
+  default = 1
+}
+
+variable "ibmi_memory" {
+  description = "Amount of memory in GB to allocate to the IBMi instance."
+  type        = number
+  default     = 4
+}
+
+variable "ibmi_storage_type" {
+  description = <<-EOD
+    Storage tier for the IBMi boot volume.
+    - tier1  : NVMe-based flash (highest performance)
+    - tier3  : SSD flash (balanced)
+    - tier5k : 5k RPM spinning disk (lowest cost)
+  EOD
+  type    = string
+  default = "tier3"
+
+  validation {
+    condition     = contains(["tier1", "tier3", "tier5k"], var.ibmi_storage_type)
+    error_message = "ibmi_storage_type must be one of: tier1, tier3, tier5k."
+  }
+}
+
+variable "ibmi_additional_disks" {
+  description = <<-EOD
+    List of additional data volumes to create and attach to the IBMi instance.
+    Each entry:
+      name      - volume name (string, must be unique within the workspace)
+      size      - size in GB (number)
+      type      - storage tier: tier1, tier3, or tier5k
+      shareable - (optional) whether the volume may be shared across instances (default false)
+    Example:
+      ibmi_additional_disks = [
+        { name = "ibmi-data",  size = 200, type = "tier1" },
+        { name = "ibmi-logs",  size = 50,  type = "tier3", shareable = false }
+      ]
+  EOD
+  type = list(object({
+    name      = string
+    size      = number
+    type      = string
+    shareable = optional(bool, false)
+  }))
+  default = []
+
+  validation {
+    condition     = alltrue([for d in var.ibmi_additional_disks : contains(["tier1", "tier3", "tier5k"], d.type)])
+    error_message = "Each ibmi_additional_disks entry type must be one of: tier1, tier3, tier5k."
+  }
+}
