@@ -10,13 +10,20 @@ variable "key" {
 }
 
 variable "instance_name" {
-  description = "COS instance name"
+  description = "COS instance name. If empty or not found, a new standard COS instance is created."
   type        = string
+  default     = ""
 }
 
 variable "bucket_name" {
   description = "Name of bucket to create key in"
   type        = string
+}
+
+variable "name" {
+  description = "Resource name prefix"
+  type        = string
+  default     = ""
 }
 
 variable "bucket_region" {

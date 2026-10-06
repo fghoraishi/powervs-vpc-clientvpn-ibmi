@@ -76,14 +76,7 @@ provider. See
 
 #### Secrets Manager
 
-You must have in your account an [IBM Secrets Manager](https://www.ibm.com/cloud/secrets-manager).
-This will be used to store the certificate created by this module for use with the VPN Server. The
-Secret Manager may be located in any region or any Resource Group. To specify a different Resource
-Group than the one used to create resources by this module, set the optional variable
-`secret_manager_resource_group_name`.
-
-You can create the Secrets Manager by visiting
-[IBM Cloud Catalog - Create Secrets Manager](https://cloud.ibm.com/catalog/services/secrets-manager).
+An [IBM Secrets Manager](https://www.ibm.com/cloud/secrets-manager) instance is used to store the certificate created by this module for use with the VPN Server. If an existing Secrets Manager name is provided in `secret_manager_name`, it will be looked up and used. If `secret_manager_name` is omitted or empty, this module will automatically provision a new Secrets Manager instance (Standard plan). The Secrets Manager may be located in any region or Resource Group. To specify a different Resource Group, set the optional variable `secret_manager_resource_group_name`.
 
 #### Authorization Policy
 
@@ -107,14 +100,7 @@ access of `SecretsReader`.
 
 #### Object Storage
 
-You must have in your account an [IBM Cloud Object Storage](https://www.ibm.com/cloud/object-storage)
-instance. This will be used to store the OpenVPN configuration file created by this module. The COS
-Instance may be located in any Resource Group. To specify a different Resource Group than the one
-used to create resources by this module, set the optional variable
-`cos_instance_resource_group_name`.
-
-You can create the Object Storage instance by visiting
-[IBM Cloud Catalog - Create Object Storage](https://cloud.ibm.com/objectstorage/create).
+An [IBM Cloud Object Storage](https://www.ibm.com/cloud/object-storage) instance and Smart Tier regional bucket are used to store the OpenVPN configuration file created by this module. If an existing COS instance name is provided in `cos_instance_name`, it will be looked up and used. If `cos_instance_name` is omitted or empty, this module will automatically provision a new Cloud Object Storage instance (Standard plan) and create a Smart Tier regional bucket. To specify a different Resource Group for COS, set the optional variable `cos_instance_resource_group_name`.
 
 ## Variable Behavior
 
@@ -191,7 +177,7 @@ this repository.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cos_instance_name"></a> [cos\_instance\_name](#input\_cos\_instance\_name) | The Cloud Object Storage instance name used to create a bucket with OVPN configuration file in.<br>The configuration file is used with OpenVPN Connect to connect your remote machine with the VPN created in IBM Cloud.<br><br>The COS instance maybe in any Resource Group.<br>By default, the Resource Group specified by the variable `resource_group_name` will be used to locate the COS instance.<br>However, if the COS instance is in another Resource Group use the optional variable `cos_instance_resource_group_name` to specify it. | `string` | n/a | yes |
+| <a name="input_cos_instance_name"></a> [cos\_instance\_name](#input\_cos\_instance\_name) | The Cloud Object Storage instance name used to create a bucket with OVPN configuration file in.<br>If left empty or if no existing instance with this name is found, a new COS instance (Standard plan) and a Smart Tier regional bucket will be provisioned.<br><br>The COS instance maybe in any Resource Group.<br>By default, the Resource Group specified by the variable `resource_group_name` will be used to locate the COS instance.<br>However, if the COS instance is in another Resource Group use the optional variable `cos_instance_resource_group_name` to specify it. | `string` | `""` | no |
 | <a name="input_cos_instance_resource_group_name"></a> [cos\_instance\_resource\_group\_name](#input\_cos\_instance\_resource\_group\_name) | Optional variable to specify the Resource Group the Cloud Object Storage instance is in.<br>If not supplied, the value specified for `resource_group_name` will be used to locate your COS instance. | `string` | `""` | no |
 | <a name="input_create_default_vpc_address_prefixes"></a> [create\_default\_vpc\_address\_prefixes](#input\_create\_default\_vpc\_address\_prefixes) | Optional variable to indicate whether a default address prefix should be created for each zone in this VPC. | `bool` | `false` | no |
 | <a name="input_data_location_file_path"></a> [data\_location\_file\_path](#input\_data\_location\_file\_path) | Optional variable to specify Where the file with PER location data is stored. This variable is used<br>for testing, and should not normally need to be altered. | `string` | `"./data/locations.yaml"` | no |
@@ -213,7 +199,7 @@ this repository.
 | <a name="input_ibmi_ssh_key_name"></a> [ibmi\_ssh\_key\_name](#input\_ibmi\_ssh\_key\_name) | Name of an existing SSH key in the Power Virtual Server workspace to inject into the IBMi instance. Automatically uses created SSH key if omitted. | `string` | `""` | no |
 | <a name="input_ibmi_network_name"></a> [ibmi\_network\_name](#input\_ibmi\_network\_name) | Name of an existing Power Virtual Server network to attach the IBMi instance to. Automatically uses created subnet network if omitted. | `string` | `""` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Resource Group to create new resources in (Resource Group name is case sensitive).<br><br>This will also be used to locate your existing Secrets Manager and Cloud Object Storage instance.<br>If the Secrets Manager or Cloud Object Storage instance is in a different resource group, use the optional<br>variables `secret_manager_resource_group_name` and `cos_instance_resource_group_name`, respectively, to specify those. | `string` | n/a | yes |
-| <a name="input_secret_manager_name"></a> [secret\_manager\_name](#input\_secret\_manager\_name) | The Secrets Manager to create the VPN certificate in.<br><br>The Secrets Manager maybe in any Resource Group or Region.<br>By default, the Resource Group specified by the variable `resource_group_name` will be used to locate the Secrets Manager.<br>However, if the Secrets Manager is in another Resource Group use the optional variable `secret_manager_resource_group_name` to specify it. | `string` | n/a | yes |
+| <a name="input_secret_manager_name"></a> [secret\_manager\_name](#input\_secret\_manager\_name) | The Secrets Manager instance name to create the VPN certificate in.<br>If left empty or if no existing instance with this name is found, a new Secrets Manager instance (Standard plan) will be provisioned.<br><br>The Secrets Manager maybe in any Resource Group or Region.<br>By default, the Resource Group specified by the variable `resource_group_name` will be used to locate the Secrets Manager.<br>However, if the Secrets Manager is in another Resource Group use the optional variable `secret_manager_resource_group_name` to specify it. | `string` | `""` | no |
 | <a name="input_secret_manager_resource_group_name"></a> [secret\_manager\_resource\_group\_name](#input\_secret\_manager\_resource\_group\_name) | Optional variable to specify the Resource Group the Secret Manager is in.<br>If not supplied, the value specified for `resource_group_name` will be used to locate your Secrets Manager. | `string` | `""` | no |
 | <a name="input_transit_gateway_name"></a> [transit\_gateway\_name](#input\_transit\_gateway\_name) | Optional variable to specify the name of an existing transit gateway, if supplied it will be assumed that you've connected<br>your power workspace to it. A connection to the VPC containing the VPN Server will be added, but not for the Power Workspace.<br>Supplying this variable will also suppress Power Workspace creation. | `string` | `""` | no |
 | <a name="input_vpn_client_cidr"></a> [vpn\_client\_cidr](#input\_vpn\_client\_cidr) | Optional variable to specify the CIDR for VPN client IP pool space. This is the IP space that will be<br>used by machines connecting with the VPN. You should only need to change this if you have a conflict<br>with your local network. | `string` | `"192.168.8.0/22"` | no |

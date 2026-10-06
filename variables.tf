@@ -31,25 +31,29 @@ variable "resource_group_name" {
 
 variable "secret_manager_name" {
   description = <<-EOD
-    The Secrets Manager to create the VPN certificate in.
+    The Secrets Manager instance name to create the VPN certificate in.
+    If left empty or if no existing instance with this name is found, a new Secrets Manager instance (Standard plan) will be provisioned.
 
-    The Secrets Manager maybe in any Resource Group or Region.
-    By default, the Resource Group specified by the variable `resource_group_name` will be used to locate the Secrets Manager.
+    The Secrets Manager may be in any Resource Group or Region.
+    By default, the Resource Group specified by the variable `resource_group_name` will be used.
     However, if the Secrets Manager is in another Resource Group use the optional variable `secret_manager_resource_group_name` to specify it.
   EOD
   type        = string
+  default     = ""
 }
 
 variable "cos_instance_name" {
   description = <<-EOD
-    The Cloud Object Storage instance name used to create a bucket with OVPN configuration file in.
+    The Cloud Object Storage instance name used to create a bucket with the OVPN configuration file in.
+    If left empty or if no existing instance with this name is found, a new COS instance (Standard plan) and a Smart Tier regional bucket will be provisioned.
     The configuration file is used with OpenVPN Connect to connect your remote machine with the VPN created in IBM Cloud.
 
-    The COS instance maybe in any Resource Group.
-    By default, the Resource Group specified by the variable `resource_group_name` will be used to locate the COS instance.
+    The COS instance may be in any Resource Group.
+    By default, the Resource Group specified by the variable `resource_group_name` will be used.
     However, if the COS instance is in another Resource Group use the optional variable `cos_instance_resource_group_name` to specify it.
   EOD
   type        = string
+  default     = ""
 }
 
 variable "name" {

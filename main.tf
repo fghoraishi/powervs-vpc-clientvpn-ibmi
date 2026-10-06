@@ -31,6 +31,7 @@ module "certificate" {
   secret_manager_name = var.secret_manager_name
   resource_group_id   = data.ibm_resource_group.secret_manager.id
   name                = local.uname
+  region              = local.location.vpc_region
 }
 
 module "vpc" {
@@ -61,6 +62,7 @@ module "ovpn" {
 
 module "cos_upload" {
   source            = "./modules/cos-upload"
+  name              = local.uname
   key               = format("%s.ovpn", var.name)
   content           = module.ovpn.data
   instance_name     = var.cos_instance_name

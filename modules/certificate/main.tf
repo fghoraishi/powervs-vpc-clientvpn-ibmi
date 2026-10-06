@@ -73,15 +73,32 @@ resource "tls_locally_signed_cert" "server_cert" {
   ]
 }
 
+# Look up an existing Secrets Manager instance if secret_manager_name is provided
 data "ibm_resource_instance" "secret_manager" {
+  count             = var.secret_manager_name != "" ? 1 : 0
   service           = "secrets-manager"
   name              = var.secret_manager_name
   resource_group_id = var.resource_group_id
 }
 
+# Provision a new Secrets Manager instance if no existing secret_manager_name is provided
+resource "ibm_resource_instance" "secret_manager" {
+  count             = var.secret_manager_name == "" ? 1 : 0
+  name              = format("%s-sm", var.name)
+  service           = "secrets-manager"
+  plan              = "standard"
+  location          = var.region
+  resource_group_id = var.resource_group_id
+}
+
+locals {
+  sm_guid     = var.secret_manager_name != "" ? data.ibm_resource_instance.secret_manager[0].guid : ibm_resource_instance.secret_manager[0].guid
+  sm_location = var.secret_manager_name != "" ? data.ibm_resource_instance.secret_manager[0].location : ibm_resource_instance.secret_manager[0].location
+}
+
 resource "ibm_sm_imported_certificate" "server" {
-  instance_id  = data.ibm_resource_instance.secret_manager.guid
-  region       = data.ibm_resource_instance.secret_manager.location
+  instance_id  = local.sm_guid
+  region       = local.sm_location
   name         = var.name
   description  = "Secret for VPN authentication"
   certificate  = tls_locally_signed_cert.server_cert.cert_pem
