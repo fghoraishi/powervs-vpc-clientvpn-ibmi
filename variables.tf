@@ -144,15 +144,93 @@ variable "create_default_vpc_address_prefixes" {
   default     = false
 }
 
-variable "per_override" {
+##############################################################################
+# PowerVS SSH Key & Subnet Variables
+##############################################################################
+
+variable "powervs_ssh_public_key" {
   description = <<-EOD
-    Optional variable to force the PowerVS location to be seen as PER enabled by this automation.
-    When set `true`, this will force the use of PER instead of creating Cloud Connections.
-    Set `true` when a location has been upgraded to PER before this automation has been made aware.
-    See [Getting started with the Power Edge Router](https://cloud.ibm.com/docs/power-iaas?topic=power-iaas-per) for a complete list of PER enabled locations.
+    Public SSH key string to import into the Power Virtual Server workspace.
+    If provided, an SSH key resource will be created in the PowerVS workspace
+    and automatically used for the IBMi instance (unless overridden).
   EOD
-  type        = bool
-  default     = false
+  type        = string
+  default     = ""
+}
+
+variable "powervs_ssh_key_name" {
+  description = <<-EOD
+    Name for the PowerVS SSH key created from `powervs_ssh_public_key`.
+    If left empty and `powervs_ssh_public_key` is provided, defaults to generated resource name prefix.
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "powervs_subnet_name" {
+  description = <<-EOD
+    Name for the Power Virtual Server subnet network to create.
+    If left empty but `powervs_subnet_cidr` is provided, defaults to `<name>-net`.
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "powervs_subnet_cidr" {
+  description = <<-EOD
+    CIDR block for the Power Virtual Server subnet network to create in the PowerVS workspace (e.g. 192.168.100.0/24).
+    When provided, the subnet network will be created and automatically attached to the IBMi instance.
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "powervs_subnet_type" {
+  description = <<-EOD
+    Type of PowerVS subnet network to create.
+    Supported values: vlan (private) or pub-vlan (public). Default is vlan.
+  EOD
+  type        = string
+  default     = "vlan"
+}
+
+variable "powervs_subnet_gateway" {
+  description = <<-EOD
+    Gateway IP address for the PowerVS subnet network.
+    If not specified, defaults to the first usable host IP in the CIDR block.
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "powervs_subnet_dns" {
+  description = "List of DNS server IP addresses for the PowerVS subnet network."
+  type        = list(string)
+  default     = ["127.0.0.1"]
+}
+
+variable "powervs_subnet_ipaddress_range" {
+  description = <<-EOD
+    List of IP address range(s) to allocate within the PowerVS subnet network.
+    Example:
+      powervs_subnet_ipaddress_range = [
+        {
+          pi_starting_ip_address = "192.168.100.10"
+          pi_ending_ip_address   = "192.168.100.250"
+        }
+      ]
+  EOD
+  type = list(object({
+    pi_starting_ip_address = string
+    pi_ending_ip_address   = string
+  }))
+  default = []
+}
+
+variable "powervs_subnet_mtu" {
+  description = "Maximum Transmission Unit (MTU) for the PowerVS subnet network. Default is 1450."
+  type        = number
+  default     = 1450
 }
 
 ##############################################################################
@@ -171,7 +249,8 @@ variable "ibmi_instance_name" {
 variable "ibmi_ssh_key_name" {
   description = <<-EOD
     Name of an existing SSH key in the Power Virtual Server workspace to inject
-    into the IBMi instance. Required when ibmi_instance_name is set.
+    into the IBMi instance. If `powervs_ssh_public_key` is provided, the newly
+    created SSH key is automatically used unless this variable is explicitly set.
   EOD
   type        = string
   default     = ""
@@ -180,7 +259,8 @@ variable "ibmi_ssh_key_name" {
 variable "ibmi_network_name" {
   description = <<-EOD
     Name of an existing Power Virtual Server network to attach the IBMi instance to.
-    Required when ibmi_instance_name is set.
+    If a PowerVS subnet network is created via `powervs_subnet_name`/`powervs_subnet_cidr`,
+    it is automatically attached to the IBMi instance unless this variable is explicitly set.
   EOD
   type        = string
   default     = ""

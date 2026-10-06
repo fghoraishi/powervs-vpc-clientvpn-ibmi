@@ -88,7 +88,7 @@ module "power" {
 
 locals {
   power_workspace = var.transit_gateway_name == "" ? var.power_workspace_name == "" ? module.power[0].workspace : data.ibm_resource_instance.power_workspace[0] : null
-  per_enabled     = var.per_override ? true : local.location.per_enabled
+  per_enabled     = local.location.per_enabled
 }
 
 # For locations that are not PER enabled create a Cloud Connection that is Transit Gateway enabled.
@@ -137,12 +137,45 @@ locals {
   bucket_url = module.cos_upload.bucket_url
 }
 
-# Determine which workspace GUID to pass to the IBMi module.
+# Determine which workspace GUID to pass to PowerVS resources and the IBMi module.
 # The workspace may have been created by this run or looked up from an existing one.
 locals {
-  ibmi_workspace_guid = var.transit_gateway_name == "" ? local.power_workspace.guid : (
+  power_workspace_guid = var.transit_gateway_name == "" ? (local.power_workspace != null ? local.power_workspace.guid : "") : (
     var.power_workspace_name != "" ? data.ibm_resource_instance.power_workspace[0].guid : ""
   )
+}
+
+# Create a PowerVS SSH Key if a public SSH key is provided
+module "powervs_ssh_key" {
+  count              = var.powervs_ssh_public_key != "" ? 1 : 0
+  source             = "./modules/powervs-ssh-key"
+  power_workspace_id = local.power_workspace_guid
+  name               = var.powervs_ssh_key_name != "" ? var.powervs_ssh_key_name : local.uname
+  ssh_key            = var.powervs_ssh_public_key
+  providers          = { ibm = ibm.power }
+}
+
+# Create a PowerVS subnet network
+module "powervs_network" {
+  count              = var.powervs_subnet_name != "" || var.powervs_subnet_cidr != "" ? 1 : 0
+  source             = "./modules/powervs-network"
+  power_workspace_id = local.power_workspace_guid
+  name               = var.powervs_subnet_name != "" ? var.powervs_subnet_name : format("%s-net", local.uname)
+  cidr               = var.powervs_subnet_cidr
+  gateway            = var.powervs_subnet_gateway
+  dns                = var.powervs_subnet_dns
+  ipaddress_range    = var.powervs_subnet_ipaddress_range
+  network_type       = var.powervs_subnet_type
+  mtu                = var.powervs_subnet_mtu
+  providers          = { ibm = ibm.power }
+}
+
+locals {
+  # Resolved SSH key name: created SSH key > explicit ibmi_ssh_key_name
+  effective_ssh_key_name = length(module.powervs_ssh_key) > 0 ? module.powervs_ssh_key[0].ssh_key_name : var.ibmi_ssh_key_name
+
+  # Resolved network name: created subnet network > explicit ibmi_network_name
+  effective_network_name = length(module.powervs_network) > 0 ? module.powervs_network[0].network_name : var.ibmi_network_name
 }
 
 # Provision an IBMi instance only when ibmi_instance_name is provided
@@ -150,10 +183,10 @@ module "ibmi" {
   count  = var.ibmi_instance_name != "" ? 1 : 0
   source = "./modules/ibmi"
 
-  power_workspace_id = local.ibmi_workspace_guid
+  power_workspace_id = local.power_workspace_guid
   instance_name      = var.ibmi_instance_name
-  ssh_key_name       = var.ibmi_ssh_key_name
-  network_name       = var.ibmi_network_name
+  ssh_key_name       = local.effective_ssh_key_name
+  network_name       = local.effective_network_name
 
   image_name       = var.ibmi_image_name
   sys_type         = var.ibmi_sys_type

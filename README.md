@@ -168,8 +168,11 @@ this repository.
 | <a name="module_certificate"></a> [certificate](#module\_certificate) | ./modules/certificate | n/a |
 | <a name="module_cloud_connection"></a> [cloud\_connection](#module\_cloud\_connection) | ./modules/cloud-connection | n/a |
 | <a name="module_cos_upload"></a> [cos\_upload](#module\_cos\_upload) | ./modules/cos-upload | n/a |
+| <a name="module_ibmi"></a> [ibmi](#module\_ibmi) | ./modules/ibmi | n/a |
 | <a name="module_ovpn"></a> [ovpn](#module\_ovpn) | ./modules/ovpn | n/a |
 | <a name="module_power"></a> [power](#module\_power) | ./modules/power | n/a |
+| <a name="module_powervs_network"></a> [powervs\_network](#module\_powervs\_network) | ./modules/powervs-network | n/a |
+| <a name="module_powervs_ssh_key"></a> [powervs\_ssh\_key](#module\_powervs\_ssh\_key) | ./modules/powervs-ssh-key | n/a |
 | <a name="module_transit"></a> [transit](#module\_transit) | ./modules/transit | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ./modules/vpc | n/a |
 | <a name="module_vpn"></a> [vpn](#module\_vpn) | ./modules/vpn | n/a |
@@ -194,10 +197,21 @@ this repository.
 | <a name="input_data_location_file_path"></a> [data\_location\_file\_path](#input\_data\_location\_file\_path) | Optional variable to specify Where the file with PER location data is stored. This variable is used<br>for testing, and should not normally need to be altered. | `string` | `"./data/locations.yaml"` | no |
 | <a name="input_ibmcloud_api_key"></a> [ibmcloud\_api\_key](#input\_ibmcloud\_api\_key) | The IBM Cloud platform API key needed to deploy IAM enabled resources. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | The name used for the new Power Workspace, Transit Gateway, and VPC.<br>Other resources created will use this for their basename and be suffixed by a random identifier. | `string` | n/a | yes |
-| <a name="input_per_override"></a> [per\_override](#input\_per\_override) | Optional variable to force the PowerVS location to be seen as PER enabled by this automation.<br>When set `true`, this will force the use of PER instead of creating Cloud Connections.<br>Set `true` when a location has been upgraded to PER before this automation has been made aware.<br>See [Getting started with the Power Edge Router](https://cloud.ibm.com/docs/power-iaas?topic=power-iaas-per) for a complete list of PER enabled locations. | `bool` | `false` | no |
 | <a name="input_power_cloud_connection_speed"></a> [power\_cloud\_connection\_speed](#input\_power\_cloud\_connection\_speed) | Optional variable to specify the speed of the cloud connection (speed in megabits per second).<br>This only applies to locations WITHOUT Power Edge Routers.<br><br>Supported values are 50, 100, 200, 500, 1000, 2000, 5000, 10000. Default Value is 1000. | `number` | `1000` | no |
 | <a name="input_power_workspace_location"></a> [power\_workspace\_location](#input\_power\_workspace\_location) | The location used to create the power workspace.<br><br>Available locations are: dal10, dal12, us-south, us-east, wdc06, wdc07, sao01, sao04, tor01, mon01, eu-de-1, eu-de-2, lon04, lon06, syd04, syd05, tok04, osa21, mad02, mad04.<br>Please see [PowerVS Locations](https://cloud.ibm.com/docs/power-iaas?topic=power-iaas-creating-power-virtual-server) for a complete list of PowerVS locations. | `string` | n/a | yes |
 | <a name="input_power_workspace_name"></a> [power\_workspace\_name](#input\_power\_workspace\_name) | Optional variable to specify the name of an existing power workspace.<br>If supplied the workspace will be used to connect the VPN with. | `string` | `""` | no |
+| <a name="input_powervs_ssh_public_key"></a> [powervs\_ssh\_public\_key](#input\_powervs\_ssh\_public\_key) | Public SSH key string to import into the Power Virtual Server workspace.<br>If provided, an SSH key resource will be created in the PowerVS workspace and automatically used for the IBMi instance (unless overridden). | `string` | `""` | no |
+| <a name="input_powervs_ssh_key_name"></a> [powervs\_ssh\_key\_name](#input\_powervs\_ssh\_key\_name) | Name for the PowerVS SSH key created from `powervs_ssh_public_key`. | `string` | `""` | no |
+| <a name="input_powervs_subnet_name"></a> [powervs\_subnet\_name](#input\_powervs\_subnet\_name) | Name for the Power Virtual Server subnet network to create. | `string` | `""` | no |
+| <a name="input_powervs_subnet_cidr"></a> [powervs\_subnet\_cidr](#input\_powervs\_subnet\_cidr) | CIDR block for the Power Virtual Server subnet network to create in the PowerVS workspace (e.g. 192.168.100.0/24).<br>When provided, the subnet network will be created and automatically attached to the IBMi instance. | `string` | `""` | no |
+| <a name="input_powervs_subnet_type"></a> [powervs\_subnet\_type](#input\_powervs\_subnet\_type) | Type of PowerVS subnet network to create (vlan or pub-vlan). Default is vlan. | `string` | `"vlan"` | no |
+| <a name="input_powervs_subnet_gateway"></a> [powervs\_subnet\_gateway](#input\_powervs\_subnet\_gateway) | Gateway IP address for the PowerVS subnet network. | `string` | `""` | no |
+| <a name="input_powervs_subnet_dns"></a> [powervs\_subnet\_dns](#input\_powervs\_subnet\_dns) | List of DNS server IP addresses for the PowerVS subnet network. | `list(string)` | `["127.0.0.1"]` | no |
+| <a name="input_powervs_subnet_ipaddress_range"></a> [powervs\_subnet\_ipaddress\_range](#input\_powervs\_subnet\_ipaddress\_range) | List of IP address range(s) to allocate within the PowerVS subnet network. | `list(object)` | `[]` | no |
+| <a name="input_powervs_subnet_mtu"></a> [powervs\_subnet\_mtu](#input\_powervs\_subnet\_mtu) | Maximum Transmission Unit (MTU) for the PowerVS subnet network. Default is 1450. | `number` | `1450` | no |
+| <a name="input_ibmi_instance_name"></a> [ibmi\_instance\_name](#input\_ibmi\_instance\_name) | Name for the IBMi Power Virtual Server instance. | `string` | `""` | no |
+| <a name="input_ibmi_ssh_key_name"></a> [ibmi\_ssh\_key\_name](#input\_ibmi\_ssh\_key\_name) | Name of an existing SSH key in the Power Virtual Server workspace to inject into the IBMi instance. Automatically uses created SSH key if omitted. | `string` | `""` | no |
+| <a name="input_ibmi_network_name"></a> [ibmi\_network\_name](#input\_ibmi\_network\_name) | Name of an existing Power Virtual Server network to attach the IBMi instance to. Automatically uses created subnet network if omitted. | `string` | `""` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Resource Group to create new resources in (Resource Group name is case sensitive).<br><br>This will also be used to locate your existing Secrets Manager and Cloud Object Storage instance.<br>If the Secrets Manager or Cloud Object Storage instance is in a different resource group, use the optional<br>variables `secret_manager_resource_group_name` and `cos_instance_resource_group_name`, respectively, to specify those. | `string` | n/a | yes |
 | <a name="input_secret_manager_name"></a> [secret\_manager\_name](#input\_secret\_manager\_name) | The Secrets Manager to create the VPN certificate in.<br><br>The Secrets Manager maybe in any Resource Group or Region.<br>By default, the Resource Group specified by the variable `resource_group_name` will be used to locate the Secrets Manager.<br>However, if the Secrets Manager is in another Resource Group use the optional variable `secret_manager_resource_group_name` to specify it. | `string` | n/a | yes |
 | <a name="input_secret_manager_resource_group_name"></a> [secret\_manager\_resource\_group\_name](#input\_secret\_manager\_resource\_group\_name) | Optional variable to specify the Resource Group the Secret Manager is in.<br>If not supplied, the value specified for `resource_group_name` will be used to locate your Secrets Manager. | `string` | `""` | no |
@@ -210,4 +224,11 @@ this repository.
 | Name | Description |
 |------|-------------|
 | <a name="output_bucket_url"></a> [bucket\_url](#output\_bucket\_url) | URL to bucket containing the OVPN file |
+| <a name="output_ibmi_instance_id"></a> [ibmi\_instance\_id](#output\_ibmi\_instance\_id) | ID of the provisioned IBMi Power Virtual Server instance |
+| <a name="output_ibmi_instance_name"></a> [ibmi\_instance\_name](#output\_ibmi\_instance\_name) | Name of the provisioned IBMi Power Virtual Server instance |
+| <a name="output_ibmi_network_interface"></a> [ibmi\_network\_interface](#output\_ibmi\_network\_interface) | Network interface details for the IBMi instance |
+| <a name="output_ibmi_additional_volume_ids"></a> [ibmi\_additional\_volume\_ids](#output\_ibmi\_additional\_volume\_ids) | Map of additional data volume names to volume IDs |
+| <a name="output_powervs_ssh_key_name"></a> [powervs\_ssh\_key\_name](#output\_powervs\_ssh\_key\_name) | Name of the PowerVS SSH key created by this automation |
+| <a name="output_powervs_subnet_network_name"></a> [powervs\_subnet\_network\_name](#output\_powervs\_subnet\_network\_name) | Name of the PowerVS subnet network created by this automation |
+| <a name="output_powervs_subnet_network_id"></a> [powervs\_subnet\_network\_id](#output\_powervs\_subnet\_network\_id) | ID of the PowerVS subnet network created by this automation |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
