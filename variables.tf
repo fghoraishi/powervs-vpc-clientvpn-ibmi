@@ -155,12 +155,12 @@ variable "create_default_vpc_address_prefixes" {
 
 variable "powervs_ssh_public_key" {
   description = <<-EOD
-    Public SSH key string to import into the Power Virtual Server workspace.
+    Public SSH key string starting with ssh-rsa to import into the Power Virtual Server workspace.
     If provided, an SSH key resource will be created in the PowerVS workspace
     and automatically used for the IBMi instance (unless overridden).
   EOD
   type        = string
-  default     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDgA6Qrnbn45dgKw4XXJbVVaE0WIMkUz/g3T8ur1SvTSmlFybjAAIOlu14VebwF6UuxPCf2nJSTzSOuzYk/+b1IUOIQeGH/ndEDcxQ6qE4PpNO2M4jG1xE/IfW21A5XJj8hkmDoHC2TfvbcYcTfoiTHe33XfUcVqGbM92XHjSJWZNBhixG+LcKPC1voXVv1RJ5e6LFk+bZWml/hAY6CCPS5gm"
+  default     = ""
 }
 
 variable "powervs_ssh_key_name" {
