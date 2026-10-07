@@ -71,6 +71,6 @@ resource "ibm_pi_volume_attach" "additional_disk_attach" {
   for_each = ibm_pi_volume.additional_disks
 
   pi_cloud_instance_id = var.power_workspace_id
-  pi_instance_id       = ibm_pi_instance.ibmi.instance_id
+  pi_instance_id       = ibm_pi_instance.ibmi.id
   pi_volume_id         = each.value.volume_id
 }
