@@ -289,7 +289,7 @@ variable "ibmi_image_name" {
     Run `ibmcloud pi image lc` in the target workspace to list all available images.
   EOD
   type    = string
-  default = "IBMi-7.5-09-2024-1"
+  default = "IBMi-75-09-2924-1"
 }
 
 variable "ibmi_sys_type" {
