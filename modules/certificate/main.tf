@@ -75,12 +75,14 @@ resource "tls_locally_signed_cert" "server_cert" {
 
 ###comented out by faad
 # Look up an existing Secrets Manager instance if secret_manager_name is provided
-#data "ibm_resource_instance" "secret_manager" {
+data "ibm_resource_instance" "secret_manager" {
 #  count             = var.secret_manager_name != "" ? 1 : 0
-#  service           = "secrets-manager"
+  count             = var.secret_manager_name == "" ? 1 : 0
+  service           = "secrets-manager"
 #  name              = var.secret_manager_name
-#  resource_group_id = var.resource_group_id
-#}
+  name              = format("%s-sm", var.name)
+  resource_group_id = var.resource_group_id
+}
 
 # Provision a new Secrets Manager instance if no existing secret_manager_name is provided
 resource "ibm_resource_instance" "secret_manager" {
