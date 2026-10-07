@@ -274,10 +274,19 @@ variable "ibmi_image_name" {
   description = <<-EOD
     Stock catalog image name for the IBMi OS to deploy.
     Common values:
-      IBMi-7.5-09-2024-1  (IBM i 7.5)
-      IBMi-7.4-09-2024-1  (IBM i 7.4)
-      IBMi-7.3-09-2024-1  (IBM i 7.3)
-    Run `ibmcloud pi images` in the target workspace to list all available images.
+      IBMi-73-13-2924-6   
+      IBMi-73-13-2924-7   
+      IBMi-73-13-2984-6   
+      IBMi-73-13-2984-7  
+      IBMi-74-12-2924-1   
+      IBMi-74-12-2924-2 
+      IBMi-74-12-2984-1  
+      IBMi-74-12-2984-2  
+      IBMi-75-07-2924-1   
+      IBMi-75-07-2984-1  
+      IBMi-76-01-2924-1   
+      IBMi-76-01-2984-1
+    Run `ibmcloud pi image lc` in the target workspace to list all available images.
   EOD
   type    = string
   default = "IBMi-7.5-09-2024-1"
