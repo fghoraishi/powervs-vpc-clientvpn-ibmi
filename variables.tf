@@ -364,8 +364,8 @@ variable "ibmi_additional_disks" {
       type      - storage tier: tier0, tier1, tier3, or tier5k
       shareable - (optional) whether the volume may be shared across instances (default false)
     Example for two disks (exclude the second disk and remove comma):
-      ibmi_additional_disks = [
-        { name = "ibmi-data",  size = 200, type = "tier1", shareable = true },
+
+      [ { name = "ibmi-data",  size = 200, type = "tier1", shareable = true },
         { name = "ibmi-logs",  size = 50,  type = "tier3", shareable = false } ]
   EOD
   type = list(object({
