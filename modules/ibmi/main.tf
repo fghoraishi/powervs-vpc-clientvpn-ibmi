@@ -42,7 +42,8 @@ resource "ibm_pi_instance" "ibmi" {
 
   # Boot volume storage tier
   pi_storage_type = var.storage_type
-
+# added by faad to allow attaching mulitple storage pools
+  pi_storage_pool_affinity = false
   # SSH key (must already exist in the workspace)
   pi_key_pair_name = var.ssh_key_name
 
