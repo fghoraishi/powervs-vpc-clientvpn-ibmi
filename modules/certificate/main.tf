@@ -103,8 +103,8 @@ locals {
 resource "ibm_sm_imported_certificate" "server" {
   instance_id  = local.sm_guid
   region       = local.sm_location
-#  name         = var.name
-  name         = format("%s-sm", var.name)
+  name         = var.name
+#  name         = format("%s-sm", var.name)
   description  = "Secret for VPN authentication"
   certificate  = tls_locally_signed_cert.server_cert.cert_pem
   private_key  = tls_private_key.server_key.private_key_pem
