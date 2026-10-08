@@ -26,12 +26,22 @@ data "ibm_resource_group" "cos_instance" {
   name = var.cos_instance_resource_group_name == "" ? var.resource_group_name : var.cos_instance_resource_group_name
 }
 
+# Authorization policy allowing VPC Client-to-Site VPN service to read secrets from Secrets Manager
+resource "ibm_iam_authorization_policy" "vpn_secrets_manager" {
+  source_service_name         = "is"
+  source_resource_type        = "vpn-server"
+  target_service_name         = "secrets-manager"
+  roles                       = ["SecretsReader"]
+  description                 = "Allow VPC VPN Server service to read secrets in Secrets Manager"
+}
+
 module "certificate" {
   source              = "./modules/certificate"
   secret_manager_name = var.secret_manager_name
   resource_group_id   = data.ibm_resource_group.secret_manager.id
   name                = local.uname
   region              = local.location.vpc_region
+  depends_on          = [ibm_iam_authorization_policy.vpn_secrets_manager]
 }
 
 module "vpc" {

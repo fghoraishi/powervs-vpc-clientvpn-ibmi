@@ -80,19 +80,7 @@ An [IBM Secrets Manager](https://www.ibm.com/cloud/secrets-manager) instance is 
 
 #### Authorization Policy
 
-A privileged user for the account will need to
-[create an authorization policy](https://cloud.ibm.com/iam/authorizations/grant) that will allow the
-VPC VPN Service access to read secrets in the Secret Manager service(s). The policy should look
-similar to this:
-
-![Authorization Policy](./doc/materials/authorization_policy.png)
-
-To create the authorization policy you must specify the Source service as
-`VPC Infrastructure Services` and then choose to scope resources based on attribute by resource type
-`Client VPN for VPC`. The Target service must be set to `Secrets Manager`. You may choose to limit
-the scope (but it is not necessary) by various different attributes, including the exact instance
-created in the [Secrets Manager Prerequisite](#secrets-manager) step above. Then allow Service
-access of `SecretsReader`.
+This Terraform automation automatically manages the IAM service-to-service authorization policy (`ibm_iam_authorization_policy.vpn_secrets_manager`), which authorizes VPC Infrastructure Services (`is`) with resource type `vpn-server` (`Client VPN for VPC`) to access Secrets Manager (`secrets-manager`) with the `SecretsReader` role.
 
 | Source Service | Target Service |
 :---:|:---:
@@ -167,6 +155,7 @@ this repository.
 
 | Name | Type |
 |------|------|
+| [ibm_iam_authorization_policy.vpn_secrets_manager](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.62.0/docs/resources/iam_authorization_policy) | resource |
 | [random_string.resource_identifier](https://registry.terraform.io/providers/hashicorp/random/3.5.1/docs/resources/string) | resource |
 | [ibm_resource_group.cos_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.62.0/docs/data-sources/resource_group) | data source |
 | [ibm_resource_group.group](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.62.0/docs/data-sources/resource_group) | data source |
