@@ -80,7 +80,7 @@ data "ibm_resource_instance" "secret_manager" {
   depends_on        = [ibm_resource_instance.secret_manager]
   count             = var.secret_manager_name == "" ? 1 : 0
   service           = "secrets-manager"
-  name              = var.secret_manager_name
+#  name              = var.secret_manager_name
   name              = format("%s-sm", var.name)
   resource_group_id = var.resource_group_id
 }
