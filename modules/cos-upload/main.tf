@@ -1,6 +1,6 @@
 # Look up an existing COS instance if instance_name is provided
 data "ibm_resource_instance" "cos_instance" {
-  count             = var.instance_name != "" ? 1 : 0
+  count             = var.instance_name == "" ? 1 : 0
   name              = var.instance_name
   resource_group_id = var.resource_group_id
   service           = "cloud-object-storage"
@@ -9,7 +9,7 @@ data "ibm_resource_instance" "cos_instance" {
 # Provision a new COS instance with Standard pricing if no existing instance_name is provided
 resource "ibm_resource_instance" "cos_instance" {
   count             = var.instance_name == "" ? 1 : 0
-  name              = format("%s-cos", var.name != "" ? var.name : var.bucket_name)
+  name              = format("%s-cos", var.cos_instance_name != "" ? var.name : var.bucket_name)
   service           = "cloud-object-storage"
   plan              = "standard"
   location          = "global"
