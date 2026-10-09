@@ -17,8 +17,8 @@ resource "ibm_resource_instance" "cos_instance" {
 }
 
 locals {
-  cos_instance_id  = var.instance_name != "" ? data.ibm_resource_instance.cos_instance[0].id : ibm_resource_instance.cos_instance[0].id
-  cos_instance_crn = var.instance_name != "" ? data.ibm_resource_instance.cos_instance[0].crn : ibm_resource_instance.cos_instance[0].crn
+  cos_instance_id  = var.instance_name == "" ? data.ibm_resource_instance.cos_instance[0].id : ibm_resource_instance.cos_instance[0].id
+  cos_instance_crn = var.instance_name == "" ? data.ibm_resource_instance.cos_instance[0].crn : ibm_resource_instance.cos_instance[0].crn
 }
 
 # Create Smart Tier regional COS bucket
