@@ -42,7 +42,7 @@ module "certificate" {
   resource_group_id   = data.ibm_resource_group.secret_manager.id
   name                = local.uname
   region              = local.location.vpc_region
-  depends_on          = [ibm_iam_authorization_policy.vpn_secrets_manager]
+#  depends_on          = [ibm_iam_authorization_policy.vpn_secrets_manager]
 }
 
 module "vpc" {
