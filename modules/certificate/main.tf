@@ -76,12 +76,12 @@ resource "tls_locally_signed_cert" "server_cert" {
 ###comented out by faad
 # Look up an existing Secrets Manager instance if secret_manager_name is provided
 data "ibm_resource_instance" "secret_manager" {
-#  count             = var.secret_manager_name != "" ? 1 : 0
-  depends_on = [ibm_resource_instance.secret_manager]
+  count             = var.secret_manager_name != "" ? 1 : 0
+  depends_on         = [ibm_resource_instance.secret_manager]
   count             = var.secret_manager_name == "" ? 1 : 0
   service           = "secrets-manager"
-#  name              = var.secret_manager_name
-  name              = format("%s-sm", var.name)
+  name              = var.secret_manager_name
+#  name              = format("%s-sm", var.name)
   resource_group_id = var.resource_group_id
 }
 
@@ -94,19 +94,22 @@ resource "ibm_resource_instance" "secret_manager" {
   service           = "secrets-manager"
   plan              = "standard"
   location          = var.region
+  service_endpoints = "public-and-private"
   resource_group_id = var.resource_group_id
 }
 
 locals {
-  sm_guid     = var.secret_manager_name != "" ? data.ibm_resource_instance.secret_manager[0].guid : ibm_resource_instance.secret_manager[0].guid
-  sm_location = var.secret_manager_name != "" ? data.ibm_resource_instance.secret_manager[0].location : ibm_resource_instance.secret_manager[0].location
+#  sm_guid     = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager[0].guid : ibm_resource_instance.secret_manager[0].guid
+#  sm_location = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager[0].location : ibm_resource_instance.secret_manager[0].location
+  sm_guid     = ibm_resource_instance.secret_manager[0].guid
+  sm_location = ibm_resource_instance.secret_manager[0].location
 }
 
 resource "ibm_sm_imported_certificate" "server" {
   instance_id  = local.sm_guid
   region       = local.sm_location
-  name         = var.name
-#  name         = format("%s-sm", var.name)
+#  name         = var.name
+  name         = format("%s-sm", var.name)
   description  = "Secret for VPN authentication"
   certificate  = tls_locally_signed_cert.server_cert.cert_pem
   private_key  = tls_private_key.server_key.private_key_pem
