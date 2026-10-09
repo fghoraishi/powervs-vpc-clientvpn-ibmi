@@ -1,7 +1,7 @@
 # Look up an existing COS instance if instance_name is provided
 data "ibm_resource_instance" "cos_instance" {
   count             = var.instance_name == "" ? 1 : 0
-  depends_on           = [ibm_resource_instance.cos_instance]
+#  depends_on           = [ibm_resource_instance.cos_instance]
   name              = var.name
   resource_group_id = var.resource_group_id
   service           = "cloud-object-storage"
