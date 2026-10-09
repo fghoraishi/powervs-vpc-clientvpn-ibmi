@@ -26,14 +26,15 @@ data "ibm_resource_group" "cos_instance" {
   name = var.cos_instance_resource_group_name == "" ? var.resource_group_name : var.cos_instance_resource_group_name
 }
 
+### commented out since it alreay exist - faad
 # Authorization policy allowing VPC Client-to-Site VPN service to read secrets from Secrets Manager
-resource "ibm_iam_authorization_policy" "vpn_secrets_manager" {
-  source_service_name         = "is"
-  source_resource_type        = "vpn-server"
-  target_service_name         = "secrets-manager"
-  roles                       = ["SecretsReader"]
-  description                 = "Allow VPC VPN Server service to read secrets in Secrets Manager"
-}
+#resource "ibm_iam_authorization_policy" "vpn_secrets_manager" {
+#  source_service_name         = "is"
+#  source_resource_type        = "vpn-server"
+#  target_service_name         = "secrets-manager"
+#  roles                       = ["SecretsReader"]
+#  description                 = "Allow VPC VPN Server service to read secrets in Secrets Manager"
+#}
 
 module "certificate" {
   source              = "./modules/certificate"
