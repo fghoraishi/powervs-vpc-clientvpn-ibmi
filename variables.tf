@@ -3,7 +3,7 @@
 ##############################################################################
 
 variable "ibmcloud_api_key" {
-  description = "REQUIRED - The IBM Cloud platform API key needed to deploy IAM enabled resources."
+  description = "REQUIRED - Provide the IBM Cloud platform API key needed to deploy IAM enabled resources."
   type        = string
   sensitive   = true
 }
