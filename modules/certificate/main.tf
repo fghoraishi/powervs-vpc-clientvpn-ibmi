@@ -78,7 +78,7 @@ resource "tls_locally_signed_cert" "server_cert" {
 data "ibm_resource_instance" "secret_manager" {
   count             = var.secret_manager_name == "" ? 1 : 0
   depends_on        = [ibm_resource_instance.secret_manager]
-  count             = var.secret_manager_name == "" ? 1 : 0
+#  count             = var.secret_manager_name == "" ? 1 : 0
   service           = "secrets-manager"
 #  name              = var.secret_manager_name
   name              = format("%s-sm", var.name)
@@ -89,8 +89,8 @@ data "ibm_resource_instance" "secret_manager" {
 # Provision a new Secrets Manager instance if no existing secret_manager_name is provided
 resource "ibm_resource_instance" "secret_manager" {
   count             = var.secret_manager_name != "" ? 1 : 0
-#  name              = format("%s-sm", var.name)
-  name              = var.secret_manager_name
+  name              = format("%s-sm", var.name)
+#  name              = var.secret_manager_name
   service           = "secrets-manager"
   plan              = "standard"
   location          = var.region
