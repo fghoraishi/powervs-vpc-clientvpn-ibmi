@@ -27,10 +27,11 @@ output "ibmi_additional_volume_ids" {
   description = "Map of additional data volume names to volume IDs for the IBMi instance (null when not created)."
 }
 
-output "powervs_ssh_key_name" {
-  value       = length(module.powervs_ssh_key) > 0 ? module.powervs_ssh_key[0].ssh_key_name : null
-  description = "Name of the PowerVS SSH key created by this automation (null when not created)."
-}
+# faad commented to remove ssh key
+#output "powervs_ssh_key_name" {
+#  value       = length(module.powervs_ssh_key) > 0 ? module.powervs_ssh_key[0].ssh_key_name : null
+#  description = "Name of the PowerVS SSH key created by this automation (null when not created)."
+#}
 
 output "powervs_subnet_network_name" {
   value       = length(module.powervs_network) > 0 ? module.powervs_network[0].network_name : null
