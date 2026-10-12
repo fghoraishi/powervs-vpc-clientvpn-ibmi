@@ -39,7 +39,6 @@ resource "ibm_pi_instance" "ibmi" {
   pi_proc_type  = var.proc_type
   pi_processors = var.processors
   pi_memory     = var.memory
-
   # Boot volume storage tier
   pi_storage_type = var.storage_type
 # added by faad to allow attaching mulitple storage pools

@@ -12,10 +12,10 @@ variable "power_workspace_id" {
   description = "The GUID of the Power Virtual Server workspace in which to create the IBMi instance."
 }
 
-variable "ssh_key_name" {
-  type        = string
-  description = "Name of the SSH key in the Power workspace to inject into the IBMi instance."
-}
+#variable "ssh_key_name" {
+#  type        = string
+#  description = "Name of the SSH key in the Power workspace to inject into the IBMi instance."
+#}
 
 variable "network_name" {
   type        = string
