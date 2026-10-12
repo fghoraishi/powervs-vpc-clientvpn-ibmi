@@ -148,10 +148,12 @@ variable "create_default_vpc_address_prefixes" {
   type        = bool
   default     = false
 }
-
+/*
 ##############################################################################
 # PowerVS SSH Key & Subnet Variables
 ##############################################################################
+
+## removed ssh key for ibmi
 
 variable "powervs_ssh_public_key" {
   description = <<-EOD
@@ -171,6 +173,7 @@ variable "powervs_ssh_key_name" {
   type        = string
   default     = ""
 }
+*/
 
 variable "powervs_subnet_name" {
   description = <<-EOD

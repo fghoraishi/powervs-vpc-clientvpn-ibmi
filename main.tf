@@ -203,7 +203,7 @@ module "ibmi" {
 
   power_workspace_id = local.power_workspace_guid
   instance_name      = var.ibmi_instance_name
-  ssh_key_name       = local.effective_ssh_key_name
+  #ssh_key_name       = local.effective_ssh_key_name
   network_name       = local.effective_network_name
 
   image_name       = var.ibmi_image_name
