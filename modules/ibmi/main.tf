@@ -45,7 +45,7 @@ resource "ibm_pi_instance" "ibmi" {
 # added by faad to allow attaching mulitple storage pools
   pi_storage_pool_affinity = false
   # SSH key (must already exist in the workspace)
-  pi_key_pair_name = var.ssh_key_name
+#  pi_key_pair_name = var.ssh_key_name
 
   # Network
   pi_network {

@@ -159,6 +159,8 @@ locals {
   )
 }
 
+##removed ssh key creation
+/*
 # Create a PowerVS SSH Key if a public SSH key is provided
 module "powervs_ssh_key" {
   count              = var.powervs_ssh_public_key != "" ? 1 : 0
@@ -168,6 +170,7 @@ module "powervs_ssh_key" {
   ssh_key            = var.powervs_ssh_public_key
   providers          = { ibm = ibm.power }
 }
+*/
 
 # Create a PowerVS subnet network
 module "powervs_network" {
@@ -185,8 +188,9 @@ module "powervs_network" {
 }
 
 locals {
+## removed creating ssh key
   # Resolved SSH key name: created SSH key > explicit ibmi_ssh_key_name
-  effective_ssh_key_name = length(module.powervs_ssh_key) > 0 ? module.powervs_ssh_key[0].ssh_key_name : var.ibmi_ssh_key_name
+#  effective_ssh_key_name = length(module.powervs_ssh_key) > 0 ? module.powervs_ssh_key[0].ssh_key_name : var.ibmi_ssh_key_name
 
   # Resolved network name: created subnet network > explicit ibmi_network_name
   effective_network_name = length(module.powervs_network) > 0 ? module.powervs_network[0].network_name : var.ibmi_network_name
