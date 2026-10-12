@@ -8,7 +8,7 @@ variable "power_workspace_id" {
   description = "The GUID of the Power Virtual Server workspace"
 }
 
-variable "ssh_key" {
-  type        = string
-  description = "SSH RSA public key value"
-}
+#variable "ssh_key" {
+#  type        = string
+#  description = "SSH RSA public key value"
+#}
