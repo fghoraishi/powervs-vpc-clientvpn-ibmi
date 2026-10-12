@@ -254,7 +254,7 @@ variable "ibmi_instance_name" {
   type        = string
   default     = ""
 }
-
+/*
 variable "ibmi_ssh_key_name" {
   description = <<-EOD
     Name of an existing SSH key in the Power Virtual Server workspace to inject
@@ -264,6 +264,7 @@ variable "ibmi_ssh_key_name" {
   type        = string
   default     = ""
 }
+*/
 
 variable "ibmi_network_name" {
   description = <<-EOD
