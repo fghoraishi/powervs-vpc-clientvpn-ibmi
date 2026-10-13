@@ -42,7 +42,7 @@ resource "ibm_pi_instance" "ibmi" {
   # Boot volume storage tier
   pi_storage_type = var.storage_type
 # added by faad to allow attaching mulitple storage pools
-  pi_storage_pool_affinity = false
+  pi_storage_pool_affinity = true
   # SSH key (must already exist in the workspace)
 #  pi_key_pair_name = var.ssh_key_name
 
@@ -63,6 +63,8 @@ resource "ibm_pi_volume" "additional_disks" {
   pi_volume_size       = each.value.size
   pi_volume_type       = each.value.type
 #  pi_volume_shareable  = each.value.shareable
+  pi_affinity_policy   = true
+  pi_affinity_instance = ibm_pi_instance.ibmi.pi_instance_id
 }
 
 # Attach each additional volume to the instance
