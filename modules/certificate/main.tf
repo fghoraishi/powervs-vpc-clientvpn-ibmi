@@ -73,7 +73,6 @@ resource "tls_locally_signed_cert" "server_cert" {
   ]
 }
 
-/*
 ##test if Secrets manager exists
 
 # This lookup returns an empty array if no match is found, instead of crashing
@@ -86,14 +85,18 @@ locals {
 }
 
 # Act on it: Only create a resource if the target VPC does NOT exist
-resource "aws_security_group" "dynamic" {
-  count  = local.vpc_exists ? 0 : 1
-  name   = "fallback-sg"
-  vpc_id = "some_default_vpc_id"
+resource "ibm_resource_instance" "secret_manager" {
+  count  = local.sm_exists ? 0 : 1
+  service           = "secrets-manager"
+  name              = var.secret_manager_name
+  plan              = "standard"
+#  plan              = "trial"
+  location          = var.region
+  service_endpoints = "public-and-private"
+  resource_group_id = var.resource_group_id
 }
 
-*/
-
+/*
 # Look up an existing Secrets Manager instance if secret_manager_name is provided
 data "ibm_resource_instance" "secret_manager" {
   count             = var.secret_manager_name != "" ? 1 : 0
@@ -109,7 +112,7 @@ data "ibm_resource_instance" "secret_manager" {
 # Provision a new Secrets Manager instance if no existing secret_manager_name is provided
 resource "ibm_resource_instance" "secret_manager" {
 #  count             = var.secret_manager_name != "" ? 1 : 0
-  count              = data.ibm_resource_instance.secret_manager[0].guid != "" ? 1 : 0
+  count              = data.ibm_resource_instance.secret_manager[0].guid == "" ? 1 : 0
   name               = format("%s-sm", var.name)
 #  name              = var.secret_manager_name
   service           = "secrets-manager"
@@ -119,6 +122,8 @@ resource "ibm_resource_instance" "secret_manager" {
   service_endpoints = "public-and-private"
   resource_group_id = var.resource_group_id
 }
+
+*/
 
 locals {
   sm_guid     = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager[0].guid : ibm_resource_instance.secret_manager[0].guid
