@@ -63,8 +63,8 @@ resource "ibm_pi_volume" "additional_disks" {
   pi_volume_size       = each.value.size
   pi_volume_type       = each.value.type
 #  pi_volume_shareable  = each.value.shareable
-  pi_affinity_policy   = true
-  pi_affinity_instance = ibm_pi_instance.ibmi.pi_instance_id
+  pi_affinity_policy   = affinity
+  pi_affinity_instance = ibm_pi_instance.ibmi.instance_id
   depends_on           = [ibm_pi_instance.ibmi]
 }
 
