@@ -86,7 +86,7 @@ locals {
 
 # Act on it: Only create a resource if the target VPC does NOT exist
 resource "ibm_resource_instance" "secret_manager" {
-  count  = local.sm_exists ? 0 : 1
+  count             = local.sm_exists ? 0 : 1
   service           = "secrets-manager"
   name              = var.secret_manager_name
   plan              = "standard"
@@ -97,6 +97,9 @@ resource "ibm_resource_instance" "secret_manager" {
 }
 
 /*
+
+#### next 20 lines commented out - old method
+
 # Look up an existing Secrets Manager instance if secret_manager_name is provided
 data "ibm_resource_instance" "secret_manager" {
   count             = var.secret_manager_name != "" ? 1 : 0
@@ -126,8 +129,10 @@ resource "ibm_resource_instance" "secret_manager" {
 */
 
 locals {
-  sm_guid     = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
-  sm_location = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager[0].location
+  sm_guid     = local.sm_exists ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
+  sm_location = local.sm_exists ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager[0].location
+#  sm_guid     = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
+#  sm_location = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager[0].location
 }
 
 resource "ibm_sm_imported_certificate" "server" {
