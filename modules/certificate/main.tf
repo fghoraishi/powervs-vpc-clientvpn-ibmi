@@ -129,7 +129,7 @@ resource "ibm_resource_instance" "secret_manager" {
 */
 
 locals {
-  sm_guid     = local.sm_exists ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
+  sm_guid     = local.sm_exists != "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
   sm_location = local.sm_exists ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager[0].location
 #  sm_guid     = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
 #  sm_location = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager[0].location
@@ -138,6 +138,7 @@ locals {
 resource "ibm_sm_imported_certificate" "server" {
   instance_id  = local.sm_guid
   region       = local.sm_location
+  endpoint_type = "private"
 #  name         = var.name
   name         = format("%s-sm", var.name)
   description  = "Secret for VPN authentication"
