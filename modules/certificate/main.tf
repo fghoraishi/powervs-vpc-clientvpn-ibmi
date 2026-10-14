@@ -126,10 +126,8 @@ resource "ibm_resource_instance" "secret_manager" {
 */
 
 locals {
-  sm_guid     = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager[0].guid : ibm_resource_instance.secret_manager[0].guid
-  sm_location = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager[0].location : ibm_resource_instance.secret_manager[0].location
-#  sm_guid     = ibm_resource_instance.secret_manager[0].guid
-#  sm_location = ibm_resource_instance.secret_manager[0].location
+  sm_guid     = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager.guid
+  sm_location = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager.location
 }
 
 resource "ibm_sm_imported_certificate" "server" {
