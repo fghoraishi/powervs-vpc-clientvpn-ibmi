@@ -27,6 +27,7 @@ data "ibm_resource_group" "cos_instance" {
 }
 
 ### commented out since it alreay exist - faad
+## Must uncomment in final product using clean ibm cloud account and not faad account.
 # Authorization policy allowing VPC Client-to-Site VPN service to read secrets from Secrets Manager
 #resource "ibm_iam_authorization_policy" "vpn_secrets_manager" {
 #  source_service_name         = "is"
@@ -141,7 +142,8 @@ locals {
 
 module "transit" {
   source            = "./modules/transit"
-  name              = var.transit_gateway_name == "" ? var.name : var.transit_gateway_name
+#  name              = var.transit_gateway_name == "" ? var.name : var.transit_gateway_name
+  name              = var.transit_gateway_name
   region            = local.location.vpc_region
   resource_group_id = data.ibm_resource_group.group.id
   connections       = local.connections
