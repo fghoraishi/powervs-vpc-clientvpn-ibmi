@@ -21,3 +21,7 @@ variable "region" {
   description = "IBM Cloud region"
   type        = string
 }
+variable "transit_gateway_name" {
+  description = "Existing TGW"
+  type        = string
+}
