@@ -2,12 +2,12 @@
 # if it exists use it if not create a new one
 # create connections for connections supplied
 
-data "ibm_tg_gateways" "all" {
+data "ibm_tg_gateway" "all" {
 # added by faad
  name           = var.transit_gateway_name
 }
  locals {
-  tg_exists = length(data.ibm_tg_gateways.all.id) > 0
+  tg_exists = length(data.ibm_tg_gateway.all.id) > 0
 }
 
 #commented by faad
