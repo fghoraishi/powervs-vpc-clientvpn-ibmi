@@ -143,7 +143,7 @@ locals {
 module "transit" {
   source            = "./modules/transit"
 #  name              = var.transit_gateway_name == "" ? var.name : var.transit_gateway_name
-  name              = var.transit_gateway_name
+  name              = var.transit_gateway_name 
   region            = local.location.vpc_region
   resource_group_id = data.ibm_resource_group.group.id
   connections       = local.connections
