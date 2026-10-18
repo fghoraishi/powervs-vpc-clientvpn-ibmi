@@ -74,7 +74,6 @@ resource "ibm_pi_volume" "additional_disks" {
 #  pi_volume_shareable  = each.value.shareable
   pi_affinity_policy   = "affinity"
   pi_affinity_instance = ibm_pi_instance.ibmi.instance_id
-  depends_on           = [ibm_pi_instance.ibmi]
 }
 
 # Attach each additional volume to the instance
@@ -84,4 +83,5 @@ resource "ibm_pi_volume_attach" "additional_disk_attach" {
   pi_cloud_instance_id = var.power_workspace_id
   pi_instance_id       = ibm_pi_instance.ibmi.instance_id
   pi_volume_id         = each.value.volume_id
+  depends_on           = [ibm_pi_instance.ibmi]
 }
