@@ -65,6 +65,8 @@ variable "name" {
   type        = string
 }
 
+# commened out by faad
+/*
 variable "secret_manager_resource_group_name" {
   description = <<-EOD
     Optional variable to specify the Resource Group the Secret Manager is in.
@@ -92,6 +94,8 @@ variable "transit_gateway_name" {
   type        = string
   default     = ""
 }
+
+*/
 
 variable "power_cloud_connection_speed" {
   description = <<-EOD

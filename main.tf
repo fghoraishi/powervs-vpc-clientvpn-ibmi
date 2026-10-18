@@ -1,6 +1,24 @@
 ##############################################################################
 # Terraform Main IaC
 ##############################################################################
+## created by faad to replace variables in the variable.tf file with default values.
+variable secret_manager_resource_group_name {
+  type        = string
+  description = "SM resource group other than default"
+  default = ""
+}
+variable cos_instance_resource_group_name {
+  type        = string
+  description = "COS resource group other than default"
+  default = ""
+}
+variable transit_gateway_name {
+  type        = string
+  description = "existing TGW name"
+  default = ""
+}
+
+
 # Generate random identifier
 resource "random_string" "resource_identifier" {
   length  = 5

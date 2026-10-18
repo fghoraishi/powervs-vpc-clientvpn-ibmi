@@ -23,6 +23,14 @@ data "ibm_pi_network" "network" {
   pi_network_name      = var.network_name
 }
 
+
+### faaded added delay
+#depends_on = [time_sleep.wait_60_seconds]
+
+resource "time_sleep" "wait_60_seconds" {
+  create_duration = "60s"
+}
+
 # -----------------------------------------------------------------------
 # Boot volume is implicitly created by ibm_pi_instance when
 # storage_type and an image are supplied.
@@ -50,6 +58,7 @@ resource "ibm_pi_instance" "ibmi" {
   pi_network {
     network_id = data.ibm_pi_network.network.id
   }
+  depends_on = [time_sleep.wait_60_seconds]
 }
 
 # -----------------------------------------------------------------------
