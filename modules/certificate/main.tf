@@ -89,7 +89,8 @@ resource "ibm_resource_instance" "secret_manager" {
   count             = local.sm_exists ? 0 : 1
   service           = "secrets-manager"
   name              = var.secret_manager_name
-  plan              = "standard"
+  plan              = var.sm_plan
+#  plan              = "standard"
 #  plan              = "trial"
   location          = var.region
   service_endpoints = "public-and-private"
