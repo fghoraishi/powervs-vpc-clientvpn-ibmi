@@ -1,6 +1,7 @@
 ##############################################################################
 # Terraform Main IaC
 ##############################################################################
+/*
 ## created by faad to replace variables in the variable.tf file with default values.
 variable secret_manager_resource_group_name =""
 variable cos_instance_resource_group_name =""
@@ -15,7 +16,7 @@ variable powervs_subnet_dns =["127.0.0.1"]
 variable powervs_subnet_ipaddress_range =[]
 variable powervs_subnet_mtu = 1450
 variable ibmi_network_name =""
-
+*/
 ######################
 
 # Generate random identifier
