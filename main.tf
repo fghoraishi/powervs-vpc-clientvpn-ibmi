@@ -2,109 +2,19 @@
 # Terraform Main IaC
 ##############################################################################
 ## created by faad to replace variables in the variable.tf file with default values.
-#variable secret_manager_resource_group_name {
-#  type        = string
-#  description = "SM resource group other than default"
-#  default = ""
-#}
 secret_manager_resource_group_name =""
-variable cos_instance_resource_group_name {
-  type        = string
-  description = "COS resource group other than default"
-  default = ""
-}
-variable transit_gateway_name {
-  type        = string
-  description = "existing TGW name"
-  default = ""
-}
-variable "power_cloud_connection_speed" {
-  type        = number
-  default     = 1000
-}
-variable "data_location_file_path" {
-  description = <<-EOD
-    OPTIONAL - variable to specify Where the file with PER location data is stored. This variable is used
-    for testing, and should not normally need to be altered.
-  EOD
-  type        = string
-  default     = "./data/locations.yaml"
-}
-variable "powervs_ssh_public_key" {
-  description = <<-EOD
-    Public SSH key string starting with ssh-rsa to import into the Power Virtual Server workspace.
-    If provided, an SSH key resource will be created in the PowerVS workspace
-    and automatically used for the IBMi instance (unless overridden).
-  EOD
-  type        = string
-  default     = ""
-}
-
-variable "powervs_ssh_key_name" {
-  description = <<-EOD
-    Name for the PowerVS SSH key created from `powervs_ssh_public_key`.
-    If left empty and `powervs_ssh_public_key` is provided, defaults to generated resource name prefix.
-  EOD
-  type        = string
-  default     = ""
-}
-variable "powervs_subnet_type" {
-  description = <<-EOD
-    OPTIONAL - Type of PowerVS subnet network to create.
-    Supported values: vlan (private) or pub-vlan (public). Default is vlan.
-  EOD
-  type        = string
-  default     = "vlan"
-}
-
-variable "powervs_subnet_gateway" {
-  description = <<-EOD
-    OPTIONAL - Gateway IP address for the PowerVS subnet network.
-    If not specified, defaults to the first usable host IP in the CIDR block.
-  EOD
-  type        = string
-  default     = ""
-}
-
-variable "powervs_subnet_dns" {
-  description = "OPTIONAL - List of DNS server IP addresses for the PowerVS subnet network."
-  type        = list(string)
-  default     = ["127.0.0.1"]
-}
-
-variable "powervs_subnet_ipaddress_range" {
-  description = <<-EOD
-    OPTIONAL - List of IP address range(s) to allocate within the PowerVS subnet network.
-    Example:
-      powervs_subnet_ipaddress_range = [
-        {
-          pi_starting_ip_address = "192.168.100.10"
-          pi_ending_ip_address   = "192.168.100.250"
-        }
-      ]
-  EOD
-  type = list(object({
-    pi_starting_ip_address = string
-    pi_ending_ip_address   = string
-  }))
-  default = []
-}
-
-variable "powervs_subnet_mtu" {
-  description = "OPTIONAL - Maximum Transmission Unit (MTU) for the PowerVS subnet network. Default is 1450."
-  type        = number
-  default     = 1450
-}
-
-variable "ibmi_network_name" {
-  description = <<-EOD
-    OPTIONAL - Name of an existing Power Virtual Server network to attach the IBMi instance to.
-    If a PowerVS subnet network is created via `powervs_subnet_name`/`powervs_subnet_cidr`,
-    it is automatically attached to the IBMi instance unless this variable is explicitly set.
-  EOD
-  type        = string
-  default     = ""
-}
+cos_instance_resource_group_name =""
+transit_gateway_name =""
+power_cloud_connection_speed ="1000"
+data_location_file_path = "./data/locations.yaml"
+powervs_ssh_public_key =""
+powervs_ssh_key_name =""
+powervs_subnet_type = "vlan"
+powervs_subnet_gateway=""
+powervs_subnet_dns =["127.0.0.1"]
+powervs_subnet_ipaddress_range =[]
+powervs_subnet_mtu = 1450
+ibmi_network_name =""
 
 ######################
 
