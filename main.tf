@@ -2,19 +2,19 @@
 # Terraform Main IaC
 ##############################################################################
 ## created by faad to replace variables in the variable.tf file with default values.
-secret_manager_resource_group_name =""
-cos_instance_resource_group_name =""
-transit_gateway_name =""
-power_cloud_connection_speed ="1000"
-data_location_file_path = "./data/locations.yaml"
-powervs_ssh_public_key =""
-powervs_ssh_key_name =""
-powervs_subnet_type = "vlan"
-powervs_subnet_gateway=""
-powervs_subnet_dns =["127.0.0.1"]
-powervs_subnet_ipaddress_range =[]
-powervs_subnet_mtu = 1450
-ibmi_network_name =""
+variable secret_manager_resource_group_name =""
+variable cos_instance_resource_group_name =""
+variable transit_gateway_name =""
+variable power_cloud_connection_speed ="1000"
+variable data_location_file_path = "./data/locations.yaml"
+variable powervs_ssh_public_key =""
+variable powervs_ssh_key_name =""
+variable powervs_subnet_type = "vlan"
+variable powervs_subnet_gateway=""
+variable powervs_subnet_dns =["127.0.0.1"]
+variable powervs_subnet_ipaddress_range =[]
+variable powervs_subnet_mtu = 1450
+variable ibmi_network_name =""
 
 ######################
 
