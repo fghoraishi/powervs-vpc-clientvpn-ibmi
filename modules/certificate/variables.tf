@@ -19,3 +19,7 @@ variable "region" {
   description = "Region for the Secrets Manager instance if created."
   default     = ""
 }
+variable "sm_plan" {
+  description = "OPTIONAL standard or trial plan to use when creating secret manager. Trial is free for 30 days and can only be created once. Standard is paid"
+  type        = string
+}

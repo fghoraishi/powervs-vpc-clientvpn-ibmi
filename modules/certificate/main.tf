@@ -119,7 +119,8 @@ resource "ibm_resource_instance" "secret_manager" {
   name               = format("%s-sm", var.name)
 #  name              = var.secret_manager_name
   service           = "secrets-manager"
-  plan              = "standard"
+  plan              = var.sm_plan
+#  plan              = "standard"
 #  plan              = "trial"
   location          = var.region
   service_endpoints = "public-and-private"

@@ -37,10 +37,15 @@ variable "secret_manager_name" {
 
     The Secrets Manager may be in any Resource Group or Region.
     By default, the Resource Group specified by the variable `resource_group_name` will be used.
-    However, if the Secrets Manager is in another Resource Group use the optional variable `secret_manager_resource_group_name` to specify it.
   EOD
   type        = string
   default     = ""
+}
+
+variable "sm_plan" {
+  description = "OPTIONAL- if creating new Secrete Manager (choose standard or trial plan) to use when creating secret manager. Trial is free for 30 days and can only be created once. Standard is paid"
+  type        = string
+  default     = "standard"
 }
 
 variable "cos_instance_name" {
@@ -51,7 +56,6 @@ variable "cos_instance_name" {
 
     The COS instance may be in any Resource Group.
     By default, the Resource Group specified by the variable `resource_group_name` will be used.
-    However, if the COS instance is in another Resource Group use the optional variable `cos_instance_resource_group_name` to specify it.
   EOD
   type        = string
   default     = ""
@@ -59,13 +63,14 @@ variable "cos_instance_name" {
 
 variable "name" {
   description = <<-EOD
-    REQUIRED - The name used for the various new Power Workspace, Transit Gateway, and VPC, secrete manager, cos, etc..
-    Other resources created will use this for their basename and be suffixed by a random identifier.
+    REQUIRED - The name to be assigned for the various new resources being created, such as Power Workspace, Transit Gateway, and VPC, secrete manager, cos instance, etc..
+    Some resources created will use this for their basename and be suffixed by a random identifier.
+    Suggestion is to use a company name with no spaces.
   EOD
   type        = string
 }
 
-# commened out by faad
+# commened out by faad and variable defined in the main.tf file with constant value
 /*
 variable "secret_manager_resource_group_name" {
   description = <<-EOD
@@ -95,8 +100,6 @@ variable "transit_gateway_name" {
   default     = ""
 }
 
-*/
-
 variable "power_cloud_connection_speed" {
   description = <<-EOD
     OPTIONAL - variable to specify the speed of the cloud connection (speed in megabits per second).
@@ -107,6 +110,8 @@ variable "power_cloud_connection_speed" {
   type        = number
   default     = 1000
 }
+
+*/
 
 variable "power_workspace_name" {
   description = <<-EOD
@@ -119,8 +124,8 @@ variable "power_workspace_name" {
 
 variable "vpn_subnet_cidr" {
   description = <<-EOD
-    OPTIONAL -  variable to specify the CIDR for subnet the VPN will be in. You should only need to change this
-    if you have a conflict with your Power Workstation Subnets or with a VPC connected with this solution.
+    OPTIONAL -  variable to specify VPC CIDR in zone 1 to use by the VPN server. You should only need to change this
+    if you have a conflict with your Power Workstation Subnets or with other VPCs connected with this solution in your IBM cloud enviroment.
   EOD
   type        = string
   default     = "10.134.0.0/28"
@@ -128,14 +133,16 @@ variable "vpn_subnet_cidr" {
 
 variable "vpn_client_cidr" {
   description = <<-EOD
-    OPTIONAL -  variable to specify the CIDR for VPN client IP pool space. This is the IP space that will be
-    used by machines connecting with the VPN. You should only need to change this if you have a conflict
-    with your local network.
+    OPTIONAL -  variable to specify the CIDR for the VPN client IP pool space. This is the IP space that will be
+    assigned to remote machines connecting with the VPN. You should only need to change this if you have a conflict
+    using this subnet in your local network.
   EOD
   type        = string
   default     = "192.168.8.0/22"
 }
 
+# commented out by faad
+/*
 variable "data_location_file_path" {
   description = <<-EOD
     OPTIONAL - variable to specify Where the file with PER location data is stored. This variable is used
@@ -144,10 +151,11 @@ variable "data_location_file_path" {
   type        = string
   default     = "./data/locations.yaml"
 }
+*/
 
 variable "create_default_vpc_address_prefixes" {
   description = <<-EOD
-    OPTIONAL - variable to indicate whether a default address prefix should be created for each zone in this VPC.
+    OPTIONAL - variable to indicate whether additional default address prefix and subnets hould be created for each zone in this VPC. The defualt CIDR are in 10.241.x.x ranges.
   EOD
   type        = bool
   default     = false
@@ -158,7 +166,7 @@ variable "create_default_vpc_address_prefixes" {
 # PowerVS SSH Key & Subnet Variables
 ##############################################################################
 
-## removed ssh key for ibmi
+## faad - removed ssh key requirement for ibmi
 
 variable "powervs_ssh_public_key" {
   description = <<-EOD
@@ -183,7 +191,7 @@ variable "powervs_ssh_key_name" {
 variable "powervs_subnet_name" {
   description = <<-EOD
     Name for the Power Virtual Server subnet network to create.
-    If left empty but `powervs_subnet_cidr` is provided, defaults to `<name>-net`.
+    If left empty but `powervs_subnet_cidr` is provided, defaults name will be used `<name>-net`.
   EOD
   type        = string
   default     = ""
@@ -192,12 +200,14 @@ variable "powervs_subnet_name" {
 variable "powervs_subnet_cidr" {
   description = <<-EOD
     CIDR block for the Power Virtual Server subnet network to create in the PowerVS workspace (e.g. 192.168.100.0/24).
-    When provided, the subnet network will be created and automatically attached to the IBMi instance.
+    When provided, the subnet network will be created and automatically attached to the IBMi instance. Any RFC1918 private CIDR is allowed.
   EOD
   type        = string
   default     = ""
 }
 
+## commented out by faad as they are too much info needed.
+/*
 variable "powervs_subnet_type" {
   description = <<-EOD
     OPTIONAL - Type of PowerVS subnet network to create.
@@ -246,6 +256,7 @@ variable "powervs_subnet_mtu" {
   default     = 1450
 }
 
+*/
 ##############################################################################
 # IBMi Instance Variables
 ##############################################################################
@@ -268,11 +279,10 @@ variable "ibmi_ssh_key_name" {
   type        = string
   default     = ""
 }
-*/
 
 variable "ibmi_network_name" {
   description = <<-EOD
-    Name of an existing Power Virtual Server network to attach the IBMi instance to.
+    OPTIONAL - Name of an existing Power Virtual Server network to attach the IBMi instance to.
     If a PowerVS subnet network is created via `powervs_subnet_name`/`powervs_subnet_cidr`,
     it is automatically attached to the IBMi instance unless this variable is explicitly set.
   EOD
@@ -280,6 +290,7 @@ variable "ibmi_network_name" {
   default     = ""
 }
 
+*/
 variable "ibmi_image_name" {
   description = <<-EOD
     Stock catalog image name for the IBMi OS to deploy.
@@ -383,7 +394,7 @@ variable "ibmi_additional_disks" {
     type      = string
     shareable = optional(bool, false)
   }))
-  default = []
+  default = [[{ name = "ibmi-data",  size = 200, type = "tier1", shareable = true }]]
 
   validation {
     condition     = alltrue([for d in var.ibmi_additional_disks : contains(["tier0", "tier1", "tier3", "tier5k"], d.type)])

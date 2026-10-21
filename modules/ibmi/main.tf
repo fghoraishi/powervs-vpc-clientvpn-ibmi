@@ -25,10 +25,10 @@ data "ibm_pi_network" "network" {
 
 
 ### faaded added delay
-#depends_on = [time_sleep.wait_60_seconds]
+#depends_on = [time_sleep.wait_120_seconds]
 
-resource "time_sleep" "wait_60_seconds" {
-  create_duration = "60s"
+resource "time_sleep" "wait_120_seconds" {
+  create_duration = "120s"
 }
 
 # -----------------------------------------------------------------------
@@ -58,7 +58,7 @@ resource "ibm_pi_instance" "ibmi" {
   pi_network {
     network_id = data.ibm_pi_network.network.id
   }
-  depends_on = [time_sleep.wait_60_seconds]
+  depends_on = [time_sleep.wait_120_seconds]
 }
 
 # -----------------------------------------------------------------------
