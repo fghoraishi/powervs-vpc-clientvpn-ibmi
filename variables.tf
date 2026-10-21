@@ -383,7 +383,11 @@ variable "ibmi_additional_disks" {
       size      - size in GB (number)
       type      - storage tier: tier0, tier1, tier3, or tier5k
       shareable - (optional) whether the volume may be shared across instances (default false)
-    Example for two disks (exclude the second disk and remove comma):
+    Example for ond additional disk :
+
+      [ { name = "ibmi-data",  size = 200, type = "tier1", shareable = true }]
+
+    Example for two disks :
 
       [ { name = "ibmi-data",  size = 200, type = "tier1", shareable = true },
         { name = "ibmi-logs",  size = 50,  type = "tier3", shareable = false } ]
