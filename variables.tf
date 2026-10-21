@@ -260,7 +260,7 @@ variable "secret_manager_resource_group_name" {
     If not supplied, the value specified for `resource_group_name` will be used to locate your Secrets Manager.
   EOD
   type        = string
-  default     = "Default"
+  default     = ""
 }
 
 variable "cos_instance_resource_group_name" {
@@ -269,7 +269,7 @@ variable "cos_instance_resource_group_name" {
     If not supplied, the value specified for `resource_group_name` will be used to locate your COS instance.
   EOD
   type        = string
-  default     = "Default"
+  default     = ""
 }
 
 variable "transit_gateway_name" {
