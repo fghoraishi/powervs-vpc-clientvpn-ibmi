@@ -56,6 +56,7 @@ data "ibm_resource_group" "cos_instance" {
 module "certificate" {
   source              = "./modules/certificate"
   secret_manager_name = var.secret_manager_name
+  plan  = var.sm_plan
   resource_group_id   = data.ibm_resource_group.secret_manager.id
   name                = local.uname
   region              = local.location.vpc_region
