@@ -73,6 +73,8 @@ resource "tls_locally_signed_cert" "server_cert" {
   ]
 }
 
+/*
+
 ##test if Secrets manager exists
 
 # This lookup returns an empty array if no match is found, instead of crashing
@@ -98,7 +100,7 @@ resource "ibm_resource_instance" "secret_manager" {
   resource_group_id = var.resource_group_id
 }
 
-/*
+*/
 
 #### next 20 lines commented out - old method
 
@@ -129,13 +131,12 @@ resource "ibm_resource_instance" "secret_manager" {
   resource_group_id = var.resource_group_id
 }
 
-*/
 
 locals {
-  sm_guid     = local.sm_exists != "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
-  sm_location = local.sm_exists ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager[0].location
-#  sm_guid     = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
-#  sm_location = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager[0].location
+#  sm_guid     = local.sm_exists != "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
+#  sm_location = local.sm_exists ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager[0].location
+  sm_guid     = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
+  sm_location = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager[0].location
 }
 
 resource "ibm_sm_imported_certificate" "server" {
