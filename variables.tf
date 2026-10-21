@@ -283,7 +283,7 @@ variable "ibmi_additional_disks" {
     type      = string
     shareable = optional(bool, false)
   }))
-  default = [[{ name = "ibmi-data",  size = 200, type = "tier1", shareable = true }]]
+  default = [{ name = "ibmi-data",  size = 200, type = "tier3", shareable = true }]
 
   validation {
     condition     = alltrue([for d in var.ibmi_additional_disks : contains(["tier0", "tier1", "tier3", "tier5k"], d.type)])
