@@ -100,17 +100,6 @@ variable "vpn_client_cidr" {
   default     = "192.168.8.0/22"
 }
 
-# commented out by faad
-/*
-variable "data_location_file_path" {
-  description = <<-EOD
-    OPTIONAL - variable to specify Where the file with PER location data is stored. This variable is used
-    for testing, and should not normally need to be altered.
-  EOD
-  type        = string
-  default     = "./data/locations.yaml"
-}
-*/
 
 variable "create_default_vpc_address_prefixes" {
   description = <<-EOD
@@ -120,32 +109,6 @@ variable "create_default_vpc_address_prefixes" {
   default     = false
 }
 
-/*
-##############################################################################
-# PowerVS SSH Key & Subnet Variables
-##############################################################################
-
-## faad - removed ssh key requirement for ibmi
-
-variable "powervs_ssh_public_key" {
-  description = <<-EOD
-    Public SSH key string starting with ssh-rsa to import into the Power Virtual Server workspace.
-    If provided, an SSH key resource will be created in the PowerVS workspace
-    and automatically used for the IBMi instance (unless overridden).
-  EOD
-  type        = string
-  default     = ""
-}
-
-variable "powervs_ssh_key_name" {
-  description = <<-EOD
-    Name for the PowerVS SSH key created from `powervs_ssh_public_key`.
-    If left empty and `powervs_ssh_public_key` is provided, defaults to generated resource name prefix.
-  EOD
-  type        = string
-  default     = ""
-}
-*/
 
 variable "powervs_subnet_name" {
   description = <<-EOD
@@ -393,6 +356,36 @@ variable "ibmi_network_name" {
     OPTIONAL - Name of an existing Power Virtual Server network to attach the IBMi instance to.
     If a PowerVS subnet network is created via `powervs_subnet_name`/`powervs_subnet_cidr`,
     it is automatically attached to the IBMi instance unless this variable is explicitly set.
+  EOD
+  type        = string
+  default     = ""
+}
+variable "data_location_file_path" {
+  description = <<-EOD
+    OPTIONAL - variable to specify Where the file with PER location data is stored. This variable is used
+    for testing, and should not normally need to be altered.
+  EOD
+  type        = string
+  default     = "./data/locations.yaml"
+}
+##############################################################################
+# PowerVS SSH Key & Subnet Variables
+##############################################################################
+
+variable "powervs_ssh_public_key" {
+  description = <<-EOD
+    OPTIONAL - Public SSH key string starting with ssh-rsa to import into the Power Virtual Server workspace.
+    If provided, an SSH key resource will be created in the PowerVS workspace
+    and automatically used for the IBMi instance (unless overridden).
+  EOD
+  type        = string
+  default     = ""
+}
+
+variable "powervs_ssh_key_name" {
+  description = <<-EOD
+    OPTIONAL - Name for the PowerVS SSH key created from `powervs_ssh_public_key`.
+    If left empty and `powervs_ssh_public_key` is provided, defaults to generated resource name prefix.
   EOD
   type        = string
   default     = ""
