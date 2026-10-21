@@ -2,11 +2,12 @@
 # Terraform Main IaC
 ##############################################################################
 ## created by faad to replace variables in the variable.tf file with default values.
-variable secret_manager_resource_group_name {
-  type        = string
-  description = "SM resource group other than default"
-  default = ""
-}
+#variable secret_manager_resource_group_name {
+#  type        = string
+#  description = "SM resource group other than default"
+#  default = ""
+#}
+secret_manager_resource_group_name =""
 variable cos_instance_resource_group_name {
   type        = string
   description = "COS resource group other than default"
