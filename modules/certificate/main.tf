@@ -117,8 +117,8 @@ data "ibm_resource_instance" "secret_manager" {
 ##commented out by faad to add name of sm
 # Provision a new Secrets Manager instance if no existing secret_manager_name is provided
 resource "ibm_resource_instance" "secret_manager" {
-#  count             = var.secret_manager_name != "" ? 1 : 0
-  count              = data.ibm_resource_instance.secret_manager[0].guid == "" ? 1 : 0
+  count             = var.secret_manager_name == "" ? 1 : 0
+#  count              = data.ibm_resource_instance.secret_manager[0].guid == "" ? 1 : 0
   name               = format("%s-sm", var.name)
 #  name              = var.secret_manager_name
   service           = "secrets-manager"
