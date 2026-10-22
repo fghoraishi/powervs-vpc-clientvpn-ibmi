@@ -73,7 +73,6 @@ resource "tls_locally_signed_cert" "server_cert" {
   ]
 }
 
-/*
 
 ##test if Secrets manager exists
 
@@ -83,6 +82,7 @@ data "ibm_resource_instance" "secret_manager" {
     name = var.secret_manager_name
   }
 
+/*
 locals {
   sm_exists = length(data.ibm_resource_instance.secret_manager[0].guid) > 0
 }
@@ -135,8 +135,8 @@ resource "ibm_resource_instance" "secret_manager" {
 locals {
 #  sm_guid     = local.sm_exists != "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
 #  sm_location = local.sm_exists ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager[0].location
-  sm_guid     = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
-  sm_location = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager.location : ibm_resource_instance.secret_manager[0].location
+  sm_guid     = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager[0].guid : ibm_resource_instance.secret_manager[0].guid
+  sm_location = var.secret_manager_name == "" ? data.ibm_resource_instance.secret_manager[0].location : ibm_resource_instance.secret_manager[0].location
 }
 
 resource "ibm_sm_imported_certificate" "server" {
