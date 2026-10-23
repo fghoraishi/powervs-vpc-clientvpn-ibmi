@@ -74,7 +74,6 @@ resource "ibm_pi_volume" "additional_disks" {
 #  pi_volume_shareable  = each.value.shareable
   pi_affinity_policy   = "affinity"
   pi_affinity_instance = ibm_pi_instance.ibmi.instance_id
-  depends_on = [time_sleep.wait_120_seconds]
   depends_on           = [ibm_pi_instance.ibmi]
 }
 
