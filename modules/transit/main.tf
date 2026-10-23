@@ -13,7 +13,7 @@ locals {
 
 */
 resource "ibm_tg_gateway" "new" {
-  count          = length(local.existing_gateways) == 0 ? 1 : 0
+#  count          = length(local.existing_gateways) == 0 ? 1 : 0
   name           = var.name
   global         = false
   location       = var.region
@@ -21,7 +21,8 @@ resource "ibm_tg_gateway" "new" {
 }
 
 locals {
-  gateway         = local.is_existing_gateway ? one(local.existing_gateways) : ibm_tg_gateway.new[0]
+#  gateway         = local.is_existing_gateway ? one(local.existing_gateways) : ibm_tg_gateway.new[0]
+  gateway         = [ibm_tg_gateway.new]
   connections_map = { for idx, val in var.connections : idx => val }
 }
 
