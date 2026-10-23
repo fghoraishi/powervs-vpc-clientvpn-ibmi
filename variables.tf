@@ -32,9 +32,8 @@ variable "resource_group_name" {
 
 variable "secret_manager_name" {
   description = <<-EOD
-    OPTIONAL - The Secrets Manager instance name to create the VPN certificate in.
-    If left empty or if no existing instance with this name is found, a new Secrets Manager instance (Standard plan) will be provisioned.
-
+    REQUIRED - Name of an existing Secrets Manager instance to use.
+    If left empty then a new Secrets Manager instance (Standard plan) will be provisioned.
     The Secrets Manager may be in any Resource Group or Region.
     By default, the Resource Group specified by the variable `resource_group_name` will be used.
   EOD
