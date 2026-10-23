@@ -28,4 +28,6 @@ resource "ibm_tg_connection" "conn" {
   network_type = each.value.network_type
   network_id   = each.value.network_id
   name         = format("%s-%s", var.name, each.key)
+  depends_on   = [ibm_tg_gateway.new]
 }
+
