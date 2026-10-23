@@ -112,8 +112,7 @@ variable "create_default_vpc_address_prefixes" {
 
 variable "powervs_subnet_name" {
   description = <<-EOD
-    OPTIONAL - Name for the Power Virtual Server subnet network to create.
-    If left empty but `powervs_subnet_cidr` is provided, defaults name will be used `<name>-net`.
+    REQUIRED - Name for the Power Virtual Server subnet network to create. This is required if you are creating a powervs workspace and IBMi
   EOD
   type        = string
   default     = ""
