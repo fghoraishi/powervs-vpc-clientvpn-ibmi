@@ -86,8 +86,9 @@ data "ibm_resource_instance" "secret_manager" {
   }
 
 locals {
-  sm_exists = length(data.ibm_resource_instance.secret_manager[0].guid) > 0
+  sm_exists = length(data.ibm_resource_instance.secret_manager[0].guid) > 0 ? 1 : 0
 }
+
 
 # Act on it: Only create a resource if the target VPC does NOT exist
 resource "ibm_resource_instance" "secret_manager" {
