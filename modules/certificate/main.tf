@@ -80,7 +80,9 @@ resource "tls_locally_signed_cert" "server_cert" {
 
 data "ibm_resource_instance" "secret_manager" {
     count             = var.secret_manager_name != "" ? 1 : 0
-    name = var.secret_manager_name
+    name              = var.secret_manager_name
+    resource_group_id = var.resource_group_id
+    service           = "secrets-manager"
   }
 
 locals {
