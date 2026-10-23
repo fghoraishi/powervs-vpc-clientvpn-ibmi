@@ -77,7 +77,7 @@ resource "tls_locally_signed_cert" "server_cert" {
 ##test if Secrets manager exists
 
 # This lookup returns an empty array if no match is found, instead of crashing
-/*
+
 data "ibm_resource_instance" "secret_manager" {
     count             = var.secret_manager_name != "" ? 1 : 0
     name = var.secret_manager_name
@@ -100,9 +100,8 @@ resource "ibm_resource_instance" "secret_manager" {
   resource_group_id = var.resource_group_id
 }
 
-*/
 
-
+/*
 # Look up an existing Secrets Manager instance if secret_manager_name is provided
 data "ibm_resource_instance" "secret_manager" {
   count             = var.secret_manager_name != "" ? 1 : 0
@@ -130,6 +129,7 @@ resource "ibm_resource_instance" "secret_manager" {
   resource_group_id = var.resource_group_id
 }
 
+*/
 
 locals {
 #  sm_guid     = local.sm_exists != "" ? data.ibm_resource_instance.secret_manager.guid : ibm_resource_instance.secret_manager[0].guid
