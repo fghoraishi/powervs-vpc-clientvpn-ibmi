@@ -58,7 +58,7 @@ resource "ibm_pi_instance" "ibmi" {
   pi_network {
     network_id = data.ibm_pi_network.network.id
   }
-  depends_on = [time_sleep.wait_120_seconds]
+#  depends_on = [time_sleep.wait_120_seconds]
 }
 
 # -----------------------------------------------------------------------
@@ -74,6 +74,7 @@ resource "ibm_pi_volume" "additional_disks" {
 #  pi_volume_shareable  = each.value.shareable
   pi_affinity_policy   = "affinity"
   pi_affinity_instance = ibm_pi_instance.ibmi.instance_id
+  depends_on = [time_sleep.wait_120_seconds]
 }
 
 # Attach each additional volume to the instance
@@ -84,4 +85,5 @@ resource "ibm_pi_volume_attach" "additional_disk_attach" {
   pi_instance_id       = ibm_pi_instance.ibmi.instance_id
   pi_volume_id         = each.value.volume_id
   depends_on           = [ibm_pi_instance.ibmi]
+  depends_on = [time_sleep.wait_120_seconds]
 }
