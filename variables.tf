@@ -20,7 +20,7 @@ variable "power_workspace_location" {
 
 variable "resource_group_name" {
   description = <<-EOD
-    OPTIONAL - Resource Group to create new resources in (Resource Group name is case sensitive).
+    REQUIRED - Resource Group to create new resources in (i.e., Default - Resource Group name is case sensitive).
 
     This will also be used to locate your existing Secrets Manager and Cloud Object Storage instance.
     If the Secrets Manager or Cloud Object Storage instance is in a different resource group, use the optional
@@ -32,7 +32,7 @@ variable "resource_group_name" {
 
 variable "secret_manager_name" {
   description = <<-EOD
-    The Secrets Manager instance name to create the VPN certificate in.
+    OPTIONAL - The Secrets Manager instance name to create the VPN certificate in.
     If left empty or if no existing instance with this name is found, a new Secrets Manager instance (Standard plan) will be provisioned.
 
     The Secrets Manager may be in any Resource Group or Region.
@@ -43,14 +43,14 @@ variable "secret_manager_name" {
 }
 
 variable "sm_plan" {
-  description = "OPTIONAL- if creating new Secrete Manager (choose standard or trial plan) to use when creating secret manager. Trial is free for 30 days and can only be created once. Standard is paid"
+  description = "OPTIONAL- if creating new Secrete Manager (choose standard or trial plan) when creating secret manager. Trial is free for 30 days and can ONLY be created once in your account. Standard is paid"
   type        = string
   default     = "standard"
 }
 
 variable "cos_instance_name" {
   description = <<-EOD
-    The Cloud Object Storage instance name used to create a bucket with the OVPN configuration file in.
+    OPTIONAL - The Cloud Object Storage instance name used to create a bucket with the OVPN configuration file in.
     If left empty or if no existing instance with this name is found, a new COS instance (Standard plan) and a Smart Tier regional bucket will be provisioned.
     The configuration file is used with OpenVPN Connect to connect your remote machine with the VPN created in IBM Cloud.
 
@@ -74,8 +74,8 @@ variable "name" {
 
 variable "power_workspace_name" {
   description = <<-EOD
-    OPTIONAL -  variable to specify the name of an existing power workspace.
-    If supplied the workspace will be used to connect the VPN with.
+    REQUIRED -  variable to specify the name of an existing power workspace.
+    If supplied the workspace will be used to connect the VPN with else no Powervs workspace will be created.
   EOD
   type        = string
   default     = ""
@@ -112,7 +112,7 @@ variable "create_default_vpc_address_prefixes" {
 
 variable "powervs_subnet_name" {
   description = <<-EOD
-    Name for the Power Virtual Server subnet network to create.
+    OPTIONAL - Name for the Power Virtual Server subnet network to create.
     If left empty but `powervs_subnet_cidr` is provided, defaults name will be used `<name>-net`.
   EOD
   type        = string
@@ -121,7 +121,7 @@ variable "powervs_subnet_name" {
 
 variable "powervs_subnet_cidr" {
   description = <<-EOD
-    CIDR block for the Power Virtual Server subnet network to create in the PowerVS workspace (e.g. 192.168.100.0/24).
+    REQUIRED - CIDR block for the Power Virtual Server subnet network to create in the PowerVS workspace (e.g. 192.168.100.0/24).
     When provided, the subnet network will be created and automatically attached to the IBMi instance. Any RFC1918 private CIDR is allowed.
   EOD
   type        = string
@@ -133,7 +133,7 @@ variable "powervs_subnet_cidr" {
 
 variable "ibmi_instance_name" {
   description = <<-EOD
-    Name for the IBMi Power Virtual Server instance.
+    REQUIRED - Name for the IBMi Power Virtual Server instance.
     Leave empty to skip IBMi instance creation.
   EOD
   type        = string
@@ -141,7 +141,7 @@ variable "ibmi_instance_name" {
 }
 variable "ibmi_image_name" {
   description = <<-EOD
-    Stock catalog image name for the IBMi OS to deploy.
+    REQUIRED - Stock catalog image name for the IBMi OS to deploy.
     Common values:
       IBMi-73-13-2924-6   
       IBMi-73-13-2924-7   
@@ -155,7 +155,7 @@ variable "ibmi_image_name" {
       IBMi-75-07-2984-1  
       IBMi-76-01-2924-1   
       IBMi-76-01-2984-1
-    Run `ibmcloud pi image lc` in the target workspace to list all available images.
+    Run `ibmcloud pi image lc` in the target workspace to list all available images. Make sure these images are available in the region you are creating the PVM instance.
   EOD
   type    = string
   default = "IBMi-75-07-2924-1"
@@ -163,8 +163,8 @@ variable "ibmi_image_name" {
 
 variable "ibmi_sys_type" {
   description = <<-EOD
-    Machine type (processor architecture) for the IBMi instance.
-    Supported values: s922, s1022, e980, e1080.
+    REQUIRED -Machine type (processor architecture) for the IBMi instance.
+    Supported values: s922, s1022, e980, e1080. Make sure these machine types exists in the region you are deploying to.
   EOD
   type    = string
   default = "s922"
@@ -177,7 +177,7 @@ variable "ibmi_sys_type" {
 
 variable "ibmi_proc_type" {
   description = <<-EOD
-    Processor entitlement type for the IBMi instance.
+    REQUIRED -Processor entitlement type for the IBMi instance.
     - shared    : capped shared processor
     - uncapped  : uncapped shared processor
     - dedicated : dedicated processor core
@@ -193,7 +193,7 @@ variable "ibmi_proc_type" {
 
 variable "ibmi_processors" {
   description = <<-EOD
-    Number of processor cores to allocate to the IBMi instance.
+    REQUIRED - Number of processor cores to allocate to the IBMi instance.
     For shared/uncapped this is the entitled capacity (e.g. 0.25, 0.5, 1, 2).
     For dedicated this must be a whole number (e.g. 1, 2, 4).
   EOD
@@ -202,14 +202,14 @@ variable "ibmi_processors" {
 }
 
 variable "ibmi_memory" {
-  description = "Amount of memory in GB to allocate to the IBMi instance."
+  description = "REQUIRED -Amount of memory in GB to allocate to the IBMi instance."
   type        = number
   default     = 2
 }
 
 variable "ibmi_storage_type" {
   description = <<-EOD
-    Storage tier for the IBMi boot volume.
+    REQUIRED -Storage tier for the IBMi boot volume.
     - tier1  : NVMe-based flash (highest performance)
     - tier3  : SSD flash (balanced)
     - tier5k : 5k RPM spinning disk (lowest cost)
@@ -225,7 +225,7 @@ variable "ibmi_storage_type" {
 
 variable "ibmi_additional_disks" {
   description = <<-EOD
-    List of additional data volumes to create and attach to the IBMi instance.
+    OPTIONAL - List of additional data volumes to create and attach to the IBMi instance.
     Each entry:
       name      - volume name (string, must be unique within the workspace)
       size      - size in GB (number)
@@ -246,7 +246,7 @@ variable "ibmi_additional_disks" {
     type      = string
     shareable = optional(bool, false)
   }))
-  default = [{ name = "ibmi-data",  size = 200, type = "tier3", shareable = true }]
+  default = []
 
   validation {
     condition     = alltrue([for d in var.ibmi_additional_disks : contains(["tier0", "tier1", "tier3", "tier5k"], d.type)])
@@ -368,6 +368,8 @@ variable "data_location_file_path" {
   type        = string
   default     = "./data/locations.yaml"
 }
+
+/*
 ##############################################################################
 # PowerVS SSH Key & Subnet Variables
 ##############################################################################
@@ -390,3 +392,4 @@ variable "powervs_ssh_key_name" {
   type        = string
   default     = ""
 }
+*/

@@ -2,6 +2,8 @@
 # if it exists use it if not create a new one
 # create connections for connections supplied
 
+# faad - removed if TGW exists
+/*
 data "ibm_tg_gateways" "all" {}
 
 locals {
@@ -9,6 +11,7 @@ locals {
   existing_gateways   = local.is_existing_gateway ? [data.ibm_tg_gateways.all.transit_gateways[index(data.ibm_tg_gateways.all.transit_gateways[*].name, var.name)]] : []
 }
 
+*/
 resource "ibm_tg_gateway" "new" {
   count          = length(local.existing_gateways) == 0 ? 1 : 0
   name           = var.name
