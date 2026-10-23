@@ -17,14 +17,11 @@ locals {
   image_id = local.image_match[0].image_id
 }
 
-# faad removed network in powervs lookup
-/*
 # Look up the network by name
 data "ibm_pi_network" "network" {
   pi_cloud_instance_id = var.power_workspace_id
   pi_network_name      = var.network_name
 }
-*/
 
 
 ### faad added delay
@@ -59,8 +56,7 @@ resource "ibm_pi_instance" "ibmi" {
 
   # Network
   pi_network {
-#    network_id = data.ibm_pi_network.network.id
-    network_id = ibm_pi_network.network.id
+    network_id = data.ibm_pi_network.network.id
   }
   depends_on = [time_sleep.wait_120_seconds]
 }
