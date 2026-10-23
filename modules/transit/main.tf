@@ -22,7 +22,7 @@ resource "ibm_tg_gateway" "new" {
 
 locals {
 #  gateway         = local.is_existing_gateway ? one(local.existing_gateways) : ibm_tg_gateway.new[0]
-  gateway         = [ibm_tg_gateway.new]
+  gateway         = ibm_tg_gateway.new[0]
   connections_map = { for idx, val in var.connections : idx => val }
 }
 
